@@ -50,12 +50,23 @@
     <string name="country_new_york">🇺🇸 United States</string>
     <string name="weather_new_york">Rainy 16°C</string>
 
-<!-- Details -->
-    <string name="details_no_city">No city selected</string>
-    <string name="details_select_city">Select a city from the Cities tab.</string>
-    <string name="details_temperature_placeholder">--°C</string>
-    <string name="details_humidity_placeholder">Humidity: --</string>
-    <string name="details_wind_placeholder">Wind: --</string>
+<!-- Weather detail screen -->
+    <string name="weather_detail_title">Weather Details</string>
+    <string name="weather_icon_description">Weather condition icon</string>
+
+    <string name="detail_city_placeholder">City</string>
+    <string name="detail_region_placeholder">Region</string>
+    <string name="detail_temperature_placeholder">--°C / --°F</string>
+    <string name="detail_condition_placeholder">Weather condition</string>
+    <string name="detail_feels_like_placeholder">Feels like: --°C</string>
+    <string name="detail_humidity_placeholder">Humidity: --%</string>
+    <string name="detail_wind_placeholder">Wind: -- kph</string>
+
+<!-- Weather detail formatting -->
+    <string name="detail_temperature_format">%1$s°C / %2$s°F</string>
+    <string name="detail_feels_like_format">Feels like: %1$s°C</string>
+    <string name="detail_humidity_format">Humidity: %1$s%%</string>
+    <string name="detail_wind_format">Wind: %1$s kph</string>
 
 <!-- Settings -->
     <string name="settings_title">Settings</string>

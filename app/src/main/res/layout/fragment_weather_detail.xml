@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_main"
+    android:orientation="vertical">
+
+    <!--
+        Displays the detail-screen title and a back arrow.
+        The back arrow will return the user to the Search screen.
+    -->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbarWeatherDetail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/surface"
+        app:navigationIcon="@drawable/ic_back"
+        app:title="@string/weather_detail_title"
+        app:titleTextColor="@color/text_primary" />
+
+    <!--
+        Allows the weather details to scroll on smaller screens.
+    -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <!--
+                Required weather icon loaded from res/drawable.
+            -->
+            <ImageView
+                android:id="@+id/imageWeatherCondition"
+                android:layout_width="96dp"
+                android:layout_height="96dp"
+                android:contentDescription="@string/weather_icon_description"
+                android:src="@drawable/ic_weather_condition" />
+
+            <!-- Displays the selected city name -->
+            <TextView
+                android:id="@+id/textDetailCity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/detail_city_placeholder"
+                android:textAppearance="@style/TextAppearance.WeatherTrio.Headline" />
+
+            <!-- Displays the selected city region -->
+            <TextView
+                android:id="@+id/textDetailRegion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="@string/detail_region_placeholder"
+                android:textAppearance="@style/TextAppearance.WeatherTrio.Body" />
+
+            <!-- Displays both Celsius and Fahrenheit values -->
+            <TextView
+                android:id="@+id/textDetailTemperature"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="28dp"
+                android:text="@string/detail_temperature_placeholder"
+                android:textAppearance="@style/TextAppearance.WeatherTrio.Headline"
+                android:textSize="42sp" />
+
+            <!-- Displays the hardcoded weather condition -->
+            <TextView
+                android:id="@+id/textDetailCondition"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/detail_condition_placeholder"
+                android:textAppearance="@style/TextAppearance.WeatherTrio.Body"
+                android:textColor="@color/secondary"
+                android:textSize="19sp" />
+
+            <!-- Groups the remaining weather measurements -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="28dp"
+                app:cardBackgroundColor="@color/surface"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="3dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <!-- Displays the feels-like temperature -->
+                    <TextView
+                        android:id="@+id/textDetailFeelsLike"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/detail_feels_like_placeholder"
+                        android:textAppearance="@style/TextAppearance.WeatherTrio.Body"
+                        android:textSize="17sp" />
+
+                    <!-- Displays humidity as a percentage -->
+                    <TextView
+                        android:id="@+id/textDetailHumidity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        android:text="@string/detail_humidity_placeholder"
+                        android:textAppearance="@style/TextAppearance.WeatherTrio.Body"
+                        android:textSize="17sp" />
+
+                    <!-- Displays wind speed in kilometres per hour -->
+                    <TextView
+                        android:id="@+id/textDetailWind"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        android:text="@string/detail_wind_placeholder"
+                        android:textAppearance="@style/TextAppearance.WeatherTrio.Body"
+                        android:textSize="17sp" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>
