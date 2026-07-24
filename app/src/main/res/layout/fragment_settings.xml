@@ -1,15 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_main">
+    android:background="@color/background_main"
+    android:orientation="vertical"
+    android:padding="24dp">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Settings"
+        android:text="@string/settings_title"
         android:textAppearance="@style/TextAppearance.WeatherTrio.Headline" />
 
-</FrameLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="24dp"
+        android:text="@string/settings_subtitle"
+        android:textAppearance="@style/TextAppearance.WeatherTrio.Body" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/buttonWifiSettings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/settings_wifi" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/buttonLocationSettings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="@string/settings_location" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/buttonAppSettings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="@string/settings_app" />
+
+</LinearLayout>

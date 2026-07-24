@@ -64,4 +64,11 @@
     <string name="details_humidity_placeholder">Humidity: --</string>
     <string name="details_wind_placeholder">Wind: --</string>
 
+<!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_subtitle">Open your device settings for weather-related options.</string>
+    <string name="settings_wifi">Wi-Fi Settings</string>
+    <string name="settings_location">Location Settings</string>
+    <string name="settings_app">App Settings</string>
+
 </resources>
