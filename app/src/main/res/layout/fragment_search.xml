@@ -1,212 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_main"
-    android:fillViewport="true">
+    android:orientation="vertical">
 
-    <LinearLayout
+    <!--
+        Displays required screen title at the top.
+        A MaterialToolbar keeps title consistent with app theme.
+    -->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbarSearch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="20dp">
+        android:background="@color/surface"
+        app:title="@string/search_title"
+        app:titleTextColor="@color/text_primary" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:text="@string/cities_title"
-            android:textAppearance="@style/TextAppearance.WeatherTrio.Headline" />
+    <!--
+        Holds search controls and future city cards.
+        The ScrollView allows complete city list to scroll.
+    -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:text="@string/cities_subtitle"
-            android:textAppearance="@style/TextAppearance.WeatherTrio.Body" />
-
-        <!-- Toronto Card  -->
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardToronto"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            android:clickable="true"
-            android:focusable="true"
-            app:cardBackgroundColor="@color/surface"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="2dp">
+            android:orientation="vertical"
+            android:padding="20dp">
 
-            <LinearLayout
+            <!--
+                Allows the user to enter a city search.
+                Filtering logic will be added after required cards exist.
+            -->
+            <EditText
+                android:id="@+id/editSearchCity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="18dp">
+                android:hint="@string/search_hint"
+                android:inputType="text"
+                android:maxLines="1"
+                android:padding="14dp"
+                android:textColor="@color/text_primary"
+                android:textColorHint="@color/text_secondary" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/city_toronto"
-                    android:textAppearance="@style/TextAppearance.WeatherTrio.Headline"
-                    android:textSize="20sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:text="@string/weather_toronto"
-                    android:textAppearance="@style/TextAppearance.WeatherTrio.Body" />
-
-            </LinearLayout>
-
-        </com.google.android.material.card.MaterialCardView>
-
-        <!-- Vancouver Card  -->
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardVancouver"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            android:clickable="true"
-            android:focusable="true"
-            app:cardBackgroundColor="@color/surface"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="2dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
+            <!--
+                Temporary message showing where required city cards will go.
+                will be removed in the next step.
+            -->
+            <TextView
+                android:id="@+id/textCityListPlaceholder"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="18dp">
+                android:layout_marginTop="24dp"
+                android:text="@string/search_city_placeholder"
+                android:textAppearance="@style/TextAppearance.WeatherTrio.Body" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/city_vancouver"
-                    android:textAppearance="@style/TextAppearance.WeatherTrio.Headline"
-                    android:textSize="20sp" />
+        </LinearLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:text="@string/weather_vancouver"
-                    android:textAppearance="@style/TextAppearance.WeatherTrio.Body" />
+    </ScrollView>
 
-            </LinearLayout>
-
-        </com.google.android.material.card.MaterialCardView>
-
-        <!-- Calgary Card  -->
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardCalgary"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            android:clickable="true"
-            android:focusable="true"
-            app:cardBackgroundColor="@color/surface"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="2dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="18dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/city_calgary"
-                    android:textAppearance="@style/TextAppearance.WeatherTrio.Headline"
-                    android:textSize="20sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:text="@string/weather_calgary"
-                    android:textAppearance="@style/TextAppearance.WeatherTrio.Body" />
-
-            </LinearLayout>
-
-        </com.google.android.material.card.MaterialCardView>
-
-        <!-- Ottawa Card  -->
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardOttawa"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            android:clickable="true"
-            android:focusable="true"
-            app:cardBackgroundColor="@color/surface"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="2dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="18dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/city_ottawa"
-                    android:textAppearance="@style/TextAppearance.WeatherTrio.Headline"
-                    android:textSize="20sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:text="@string/weather_ottawa"
-                    android:textAppearance="@style/TextAppearance.WeatherTrio.Body" />
-
-            </LinearLayout>
-
-        </com.google.android.material.card.MaterialCardView>
-
-        <!-- Halifax Card  -->
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardHalifax"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            android:clickable="true"
-            android:focusable="true"
-            app:cardBackgroundColor="@color/surface"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="2dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="18dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/city_halifax"
-                    android:textAppearance="@style/TextAppearance.WeatherTrio.Headline"
-                    android:textSize="20sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:text="@string/weather_halifax"
-                    android:textAppearance="@style/TextAppearance.WeatherTrio.Body" />
-
-            </LinearLayout>
-
-        </com.google.android.material.card.MaterialCardView>
-
-    </LinearLayout>
-
-</ScrollView>
+</LinearLayout>
