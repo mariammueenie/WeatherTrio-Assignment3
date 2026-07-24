@@ -3,6 +3,9 @@
 <!-- App name -->
     <string name="app_name">WeatherTrio</string>
 
+<!-- Splash screen -->
+    <string name="splash_subtitle">Weather for three simple moments.</string>
+
 <!-- Bottom Navigation -->
     <string name="nav_cities">Cities</string>
     <string name="nav_details">Details</string>

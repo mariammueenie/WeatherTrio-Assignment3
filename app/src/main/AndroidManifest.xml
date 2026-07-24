@@ -5,12 +5,20 @@
         android:label="@string/app_name"
         android:theme="@style/Theme.WeatherTrio">
 
+        <!-- MainActivity contains three-tab application interface -->
         <activity
             android:name=".MainActivity"
+            android:exported="false" />
+
+        <!-- SplashActivity is first screen opened when app launches -->
+        <activity
+            android:name=".SplashActivity"
             android:exported="true">
 
+            <!-- Makes SplashActivity the launcher activity -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
