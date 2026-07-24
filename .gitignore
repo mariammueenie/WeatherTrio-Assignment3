@@ -1,0 +1,21 @@
+# Android / Gradle generated files
+.gradle/
+**/build/
+local.properties
+captures/
+.externalNativeBuild/
+.cxx/
+
+# IDE files that are specific to one computer
+.idea/
+*.iml
+.vscode/.ropeproject/
+
+# Operating-system files
+.DS_Store
+Thumbs.db
+
+# Signing files and local secrets should never be committed
+*.jks
+*.keystore
+keystore.properties
