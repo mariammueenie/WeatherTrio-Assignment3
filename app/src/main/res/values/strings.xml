@@ -26,4 +26,9 @@
 
     <string name="city_halifax">Halifax</string>
     <string name="weather_halifax">14°C · Cloudy</string>
+
+<!-- Details -->
+    <string name="details_no_city">No city selected</string>
+    <string name="details_select_city">Select a city from the Cities tab.</string>
+    
 </resources>

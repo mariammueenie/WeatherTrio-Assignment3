@@ -12,7 +12,7 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
 
     private final Fragment citiesFragment = new CitiesFragment();
-    private final Fragment detailsFragment = new DetailsFragment();
+    private final DetailsFragment detailsFragment = new DetailsFragment();
     private final Fragment settingsFragment = new SettingsFragment();
 
     private Fragment activeFragment = citiesFragment;
@@ -55,6 +55,14 @@ public class MainActivity extends AppCompatActivity {
 
             return false;
         });
+    }
+
+    // Method to show city details in the DetailsFragment
+    public void showCityDetails(String city, String weather) {
+        detailsFragment.setCityDetails(city, weather);
+
+        showFragment(detailsFragment);
+        binding.bottomNavigation.setSelectedItemId(R.id.navigation_details);
     }
 
     private void showFragment(Fragment fragment) {

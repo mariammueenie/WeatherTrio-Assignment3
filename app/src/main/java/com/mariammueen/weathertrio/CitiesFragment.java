@@ -23,6 +23,16 @@ public class CitiesFragment extends Fragment {
             @Nullable Bundle savedInstanceState
     ) {
         binding = FragmentCitiesBinding.inflate(inflater, container, false);
+
+        binding.cardToronto.setOnClickListener(view -> {
+            MainActivity activity = (MainActivity) requireActivity();
+
+            activity.showCityDetails(
+                    getString(R.string.city_toronto),
+                    getString(R.string.weather_toronto)
+            );
+        });
+
         return binding.getRoot();
     }
 

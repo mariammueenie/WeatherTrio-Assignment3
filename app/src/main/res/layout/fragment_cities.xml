@@ -27,10 +27,14 @@
             android:text="@string/cities_subtitle"
             android:textAppearance="@style/TextAppearance.WeatherTrio.Body" />
 
+        <!-- Toronto Card  -->
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardToronto"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
+            android:clickable="true"
+            android:focusable="true"
             app:cardBackgroundColor="@color/surface"
             app:cardCornerRadius="16dp"
             app:cardElevation="2dp">

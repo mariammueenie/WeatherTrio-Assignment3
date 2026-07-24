@@ -15,6 +15,19 @@ public class DetailsFragment extends Fragment {
 
     private FragmentDetailsBinding binding;
 
+    private String selectedCity;
+    private String selectedWeather;
+
+    public void setCityDetails(String city, String weather) {
+        selectedCity = city;
+        selectedWeather = weather;
+
+        if (binding != null) {
+            binding.textCityName.setText(city);
+            binding.textWeatherSummary.setText(weather);
+        }
+    }
+
     @Nullable
     @Override
     public View onCreateView(
@@ -23,6 +36,12 @@ public class DetailsFragment extends Fragment {
             @Nullable Bundle savedInstanceState
     ) {
         binding = FragmentDetailsBinding.inflate(inflater, container, false);
+
+        if (selectedCity != null && selectedWeather != null) {
+            binding.textCityName.setText(selectedCity);
+            binding.textWeatherSummary.setText(selectedWeather);
+        }
+
         return binding.getRoot();
     }
 
