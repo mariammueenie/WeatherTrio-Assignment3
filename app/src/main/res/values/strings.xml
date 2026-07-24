@@ -23,32 +23,32 @@
     <!-- London -->
     <string name="city_london">London</string>
     <string name="region_london">City of London, Greater London</string>
-    <string name="country_london">🇬🇧 United Kingdom</string>
-    <string name="weather_london">Cloudy 14°C</string>
+    <string name="country_london">&#x1F1EC;&#x1F1E7; United Kingdom</string>
+    <string name="weather_london">Cloudy 14&#176;C</string>
 
     <!-- Toronto -->
     <string name="city_toronto">Toronto</string>
     <string name="region_toronto">Ontario</string>
-    <string name="country_toronto">🇨🇦 Canada</string>
-    <string name="weather_toronto">Partly cloudy 18°C</string>
+    <string name="country_toronto">&#x1F1E8;&#x1F1E6; Canada</string>
+    <string name="weather_toronto">Partly cloudy 18&#176;C</string>
 
     <!-- Tokyo -->
     <string name="city_tokyo">Tokyo</string>
     <string name="region_tokyo">Tokyo-to</string>
-    <string name="country_tokyo">🇯🇵 Japan</string>
-    <string name="weather_tokyo">Sunny 24°C</string>
+    <string name="country_tokyo">&#x1F1EF;&#x1F1F5; Japan</string>
+    <string name="weather_tokyo">Sunny 24&#176;C</string>
 
     <!-- Sydney -->
     <string name="city_sydney">Sydney</string>
     <string name="region_sydney">New South Wales</string>
-    <string name="country_sydney">🇦🇺 Australia</string>
-    <string name="weather_sydney">Clear 21°C</string>
+    <string name="country_sydney">&#x1F1E6;&#x1F1FA; Australia</string>
+    <string name="weather_sydney">Clear 21&#176;C</string>
 
     <!-- New York -->
     <string name="city_new_york">New York</string>
     <string name="region_new_york">New York State</string>
-    <string name="country_new_york">🇺🇸 United States</string>
-    <string name="weather_new_york">Rainy 16°C</string>
+    <string name="country_new_york">&#x1F1FA;&#x1F1F8; United States</string>
+    <string name="weather_new_york">Rainy 16&#176;C</string>
 
 <!-- Weather detail screen -->
     <string name="weather_detail_title">Weather Details</string>
