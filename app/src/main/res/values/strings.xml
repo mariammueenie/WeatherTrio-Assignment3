@@ -7,4 +7,23 @@
     <string name="nav_cities">Cities</string>
     <string name="nav_details">Details</string>
     <string name="nav_settings">Settings</string>
+
+<!-- City data hardcoded -->
+    <string name="cities_title">Canadian Cities</string>
+    <string name="cities_subtitle">Select a city to view its weather details.</string>
+
+    <string name="city_toronto">Toronto</string>
+    <string name="weather_toronto">18°C · Partly cloudy</string>
+
+    <string name="city_vancouver">Vancouver</string>
+    <string name="weather_vancouver">15°C · Light rain</string>
+
+    <string name="city_calgary">Calgary</string>
+    <string name="weather_calgary">12°C · Windy</string>
+
+    <string name="city_ottawa">Ottawa</string>
+    <string name="weather_ottawa">17°C · Sunny</string>
+
+    <string name="city_halifax">Halifax</string>
+    <string name="weather_halifax">14°C · Cloudy</string>
 </resources>
