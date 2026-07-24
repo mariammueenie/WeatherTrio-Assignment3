@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Main theme for the app -->
     <style
         name="Theme.WeatherTrio"
         parent="Theme.Material3.Dark.NoActionBar">
@@ -21,6 +22,17 @@
 
     </style>
 
+    <!-- Theme used only by SplashActivity -->
+    <!-- Matching the window background prevents a white flash during launch -->
+    <style
+        name="Theme.WeatherTrio.Splash"
+        parent="Theme.WeatherTrio">
+
+        <item name="android:windowBackground">@color/background_main</item>
+
+    </style>
+
+    <!-- Text headlines for the app -->
     <style
         name="TextAppearance.WeatherTrio.Headline"
         parent="TextAppearance.Material3.HeadlineMedium">
@@ -31,6 +43,7 @@
 
     </style>
 
+    <!-- Text body for the app -->
     <style
         name="TextAppearance.WeatherTrio.Body"
         parent="TextAppearance.Material3.BodyMedium">

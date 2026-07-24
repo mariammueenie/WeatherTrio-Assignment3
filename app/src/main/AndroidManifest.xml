@@ -2,18 +2,22 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application
+        android:allowBackup="true"
         android:label="@string/app_name"
+        android:supportsRtl="true"
         android:theme="@style/Theme.WeatherTrio">
 
-        <!-- MainActivity contains three-tab application interface -->
+        <!-- MainActivity contains the main three-tab app interface -->
         <activity
             android:name=".MainActivity"
             android:exported="false" />
 
-        <!-- SplashActivity is first screen opened when app launches -->
+        <!-- SplashActivity opens first when the app launches -->
         <activity
             android:name=".SplashActivity"
-            android:exported="true">
+            android:exported="true"
+            android:noHistory="true"
+            android:theme="@style/Theme.WeatherTrio.Splash">
 
             <!-- Makes SplashActivity the launcher activity -->
             <intent-filter>
