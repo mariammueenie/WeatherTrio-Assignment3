@@ -1,6 +1,5 @@
-<!-- Basic colours -->
-
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Basic colours -->
 <resources>
     <color name="background_main">#08020E</color>
     <color name="surface">#181020</color>
