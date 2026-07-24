@@ -65,6 +65,16 @@
     <string name="settings_view_website">View on GitHub</string>
     <string name="settings_share_app">Share App</string>
 
+<!-- Settings intent content -->
+    <string name="feedback_subject">WeatherTrio Feedback</string>
+    <string name="share_app_message">Check out WeatherTrio, a simple city weather app.</string>
+    <string name="share_app_chooser_title">Share WeatherTrio</string>
+
+<!-- Settings error messages -->
+    <string name="error_no_email_app">No email app is available.</string>
+    <string name="error_no_browser">No browser is available.</string>
+    <string name="error_no_share_app">No sharing app is available.</string>
+
 <!-- Saved screen -->
     <string name="saved_empty_message">No saved cities yet</string>
     <string name="saved_empty_icon_description">Empty saved cities icon</string>
