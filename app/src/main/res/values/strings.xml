@@ -16,54 +16,36 @@
     <string name="search_hint">Search cities</string>
     <string name="search_city_placeholder">Required city cards will appear here.</string>
 
-<!-- City data hardcoded -->
-    <string name="cities_title">Canadian Cities</string>
-    <string name="cities_subtitle">Select a city to view its weather details.</string>
+<!-- Required Search screen cities -->
+    <!-- London -->
+    <string name="city_london">London</string>
+    <string name="region_london">City of London, Greater London</string>
+    <string name="country_london">🇬🇧 United Kingdom</string>
+    <string name="weather_london">Cloudy 14°C</string>
 
     <!-- Toronto -->
     <string name="city_toronto">Toronto</string>
-    <string name="weather_toronto">18°C · Partly cloudy</string>
-    <string name="temperature_toronto">18°C</string>
-    <!-- additional -->
-    <string name="condition_toronto">Partly cloudy</string>
-    <string name="humidity_toronto">Humidity: 62%</string>
-    <string name="wind_toronto">Wind: 14 km/h</string>
+    <string name="region_toronto">Ontario</string>
+    <string name="country_toronto">🇨🇦 Canada</string>
+    <string name="weather_toronto">Partly cloudy 18°C</string>
 
-    <!-- Vancouver -->
-    <string name="city_vancouver">Vancouver</string>
-    <string name="weather_vancouver">15°C · Light rain</string>
-    <string name="temperature_vancouver">15°C</string>
-    <!-- additional -->
-    <string name="condition_vancouver">Light rain</string>
-    <string name="humidity_vancouver">Humidity: 78%</string>
-    <string name="wind_vancouver">Wind: 9 km/h</string>
+    <!-- Tokyo -->
+    <string name="city_tokyo">Tokyo</string>
+    <string name="region_tokyo">Tokyo-to</string>
+    <string name="country_tokyo">🇯🇵 Japan</string>
+    <string name="weather_tokyo">Sunny 24°C</string>
 
-    <!-- Calgary -->
-    <string name="city_calgary">Calgary</string>
-    <string name="weather_calgary">12°C · Windy</string>
-    <string name="temperature_calgary">12°C</string>
-    <!-- additional -->
-    <string name="condition_calgary">Windy</string>
-    <string name="humidity_calgary">Humidity: 44%</string>
-    <string name="wind_calgary">Wind: 28 km/h</string>
+    <!-- Sydney -->
+    <string name="city_sydney">Sydney</string>
+    <string name="region_sydney">New South Wales</string>
+    <string name="country_sydney">🇦🇺 Australia</string>
+    <string name="weather_sydney">Clear 21°C</string>
 
-    <!-- Ottawa -->
-    <string name="city_ottawa">Ottawa</string>
-    <string name="weather_ottawa">17°C · Sunny</string>
-    <string name="temperature_ottawa">17°C</string>
-    <!-- additional -->
-    <string name="condition_ottawa">Sunny</string>
-    <string name="humidity_ottawa">Humidity: 55%</string>
-    <string name="wind_ottawa">Wind: 11 km/h</string>
-
-    <!-- Halifax -->
-    <string name="city_halifax">Halifax</string>
-    <string name="weather_halifax">14°C · Cloudy</string>
-    <string name="temperature_halifax">14°C</string>
-    <!-- additional -->
-    <string name="condition_halifax">Cloudy</string>
-    <string name="humidity_halifax">Humidity: 71%</string>
-    <string name="wind_halifax">Wind: 18 km/h</string>
+    <!-- New York -->
+    <string name="city_new_york">New York</string>
+    <string name="region_new_york">New York State</string>
+    <string name="country_new_york">🇺🇸 United States</string>
+    <string name="weather_new_york">Rainy 16°C</string>
 
 <!-- Details -->
     <string name="details_no_city">No city selected</string>

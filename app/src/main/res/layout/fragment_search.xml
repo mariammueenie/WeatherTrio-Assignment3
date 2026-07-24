@@ -8,8 +8,8 @@
     android:orientation="vertical">
 
     <!--
-        Displays required screen title at the top.
-        A MaterialToolbar keeps title consistent with app theme.
+        Displays the required Search screen title.
+        MaterialToolbar keeps the title consistent with the app theme.
     -->
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbarSearch"
@@ -20,8 +20,8 @@
         app:titleTextColor="@color/text_primary" />
 
     <!--
-        Holds search controls and future city cards.
-        The ScrollView allows complete city list to scroll.
+        Allows the search controls and all five city cards to scroll.
+        This keeps the screen usable on smaller devices.
     -->
     <ScrollView
         android:layout_width="match_parent"
@@ -36,8 +36,8 @@
             android:padding="20dp">
 
             <!--
-                Allows the user to enter a city search.
-                Filtering logic will be added after required cards exist.
+                Required city search field.
+                Filtering behaviour will be added after the cards are connected.
             -->
             <EditText
                 android:id="@+id/editSearchCity"
@@ -50,17 +50,270 @@
                 android:textColor="@color/text_primary"
                 android:textColorHint="@color/text_secondary" />
 
-            <!--
-                Temporary message showing where required city cards will go.
-                will be removed in the next step.
-            -->
-            <TextView
-                android:id="@+id/textCityListPlaceholder"
-                android:layout_width="wrap_content"
+            <!-- London card -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardLondon"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:text="@string/search_city_placeholder"
-                android:textAppearance="@style/TextAppearance.WeatherTrio.Body" />
+                android:layout_marginTop="20dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardBackgroundColor="@color/surface"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="3dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="18dp">
+
+                    <!-- Displays the city name -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/city_london"
+                        android:textAppearance="@style/TextAppearance.WeatherTrio.Headline"
+                        android:textSize="22sp" />
+
+                    <!-- Displays the required region -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="@string/region_london"
+                        android:textAppearance="@style/TextAppearance.WeatherTrio.Body" />
+
+                    <!-- Displays the flag emoji and country name -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="@string/country_london"
+                        android:textAppearance="@style/TextAppearance.WeatherTrio.Body" />
+
+                    <!-- Displays the hardcoded weather condition -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/weather_london"
+                        android:textAppearance="@style/TextAppearance.WeatherTrio.Body"
+                        android:textColor="@color/secondary"
+                        android:textSize="17sp" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Toronto card -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardToronto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardBackgroundColor="@color/surface"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="3dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="18dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/city_toronto"
+                        android:textAppearance="@style/TextAppearance.WeatherTrio.Headline"
+                        android:textSize="22sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="@string/region_toronto"
+                        android:textAppearance="@style/TextAppearance.WeatherTrio.Body" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="@string/country_toronto"
+                        android:textAppearance="@style/TextAppearance.WeatherTrio.Body" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/weather_toronto"
+                        android:textAppearance="@style/TextAppearance.WeatherTrio.Body"
+                        android:textColor="@color/secondary"
+                        android:textSize="17sp" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Tokyo card -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardTokyo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardBackgroundColor="@color/surface"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="3dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="18dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/city_tokyo"
+                        android:textAppearance="@style/TextAppearance.WeatherTrio.Headline"
+                        android:textSize="22sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="@string/region_tokyo"
+                        android:textAppearance="@style/TextAppearance.WeatherTrio.Body" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="@string/country_tokyo"
+                        android:textAppearance="@style/TextAppearance.WeatherTrio.Body" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/weather_tokyo"
+                        android:textAppearance="@style/TextAppearance.WeatherTrio.Body"
+                        android:textColor="@color/secondary"
+                        android:textSize="17sp" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Sydney card -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardSydney"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardBackgroundColor="@color/surface"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="3dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="18dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/city_sydney"
+                        android:textAppearance="@style/TextAppearance.WeatherTrio.Headline"
+                        android:textSize="22sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="@string/region_sydney"
+                        android:textAppearance="@style/TextAppearance.WeatherTrio.Body" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="@string/country_sydney"
+                        android:textAppearance="@style/TextAppearance.WeatherTrio.Body" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/weather_sydney"
+                        android:textAppearance="@style/TextAppearance.WeatherTrio.Body"
+                        android:textColor="@color/secondary"
+                        android:textSize="17sp" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- New York card -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardNewYork"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="20dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardBackgroundColor="@color/surface"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="3dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="18dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/city_new_york"
+                        android:textAppearance="@style/TextAppearance.WeatherTrio.Headline"
+                        android:textSize="22sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="@string/region_new_york"
+                        android:textAppearance="@style/TextAppearance.WeatherTrio.Body" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="@string/country_new_york"
+                        android:textAppearance="@style/TextAppearance.WeatherTrio.Body" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/weather_new_york"
+                        android:textAppearance="@style/TextAppearance.WeatherTrio.Body"
+                        android:textColor="@color/secondary"
+                        android:textSize="17sp" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
 
         </LinearLayout>
 
