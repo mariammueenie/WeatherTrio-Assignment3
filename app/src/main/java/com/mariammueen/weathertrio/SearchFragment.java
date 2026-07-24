@@ -14,6 +14,7 @@ import com.mariammueen.weathertrio.databinding.FragmentSearchBinding;
 public class SearchFragment extends Fragment {
 
     // Gives access to the views inside fragment_search.xml
+    // ViewBinding avoids using findViewById
     private FragmentSearchBinding binding;
 
     @Nullable
@@ -23,14 +24,14 @@ public class SearchFragment extends Fragment {
             @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState
     ) {
-        // Creates the Search screen layout using ViewBinding
+        // Creates the Search screen layout
         binding = FragmentSearchBinding.inflate(
                 inflater,
                 container,
                 false
         );
 
-        // Opens London's detail screen when its card is selected
+        // Opens London's hardcoded weather details
         binding.cardLondon.setOnClickListener(view ->
                 openWeatherDetail(
                         getString(R.string.city_london),
@@ -44,7 +45,7 @@ public class SearchFragment extends Fragment {
                 )
         );
 
-        // Opens Toronto's detail screen when its card is selected
+        // Opens Toronto's hardcoded weather details
         binding.cardToronto.setOnClickListener(view ->
                 openWeatherDetail(
                         getString(R.string.city_toronto),
@@ -58,7 +59,7 @@ public class SearchFragment extends Fragment {
                 )
         );
 
-        // Opens Tokyo's detail screen when its card is selected
+        // Opens Tokyo's hardcoded weather details
         binding.cardTokyo.setOnClickListener(view ->
                 openWeatherDetail(
                         getString(R.string.city_tokyo),
@@ -72,7 +73,7 @@ public class SearchFragment extends Fragment {
                 )
         );
 
-        // Opens Sydney's detail screen when its card is selected
+        // Opens Sydney's hardcoded weather details
         binding.cardSydney.setOnClickListener(view ->
                 openWeatherDetail(
                         getString(R.string.city_sydney),
@@ -86,7 +87,7 @@ public class SearchFragment extends Fragment {
                 )
         );
 
-        // Opens New York's detail screen when its card is selected
+        // Opens New York's hardcoded weather details
         binding.cardNewYork.setOnClickListener(view ->
                 openWeatherDetail(
                         getString(R.string.city_new_york),
@@ -113,66 +114,61 @@ public class SearchFragment extends Fragment {
             String humidity,
             String wind
     ) {
-        // Creates the separate detail fragment
-        WeatherDetailFragment detailFragment =
-                new WeatherDetailFragment();
-
-        // Stores the selected city's values in a Bundle
-        // Bundles are the required way to pass data between fragments here
+        // Stores the selected city's information in a Bundle
+        // WeatherDetailFragment reads these values when it opens
         Bundle arguments = new Bundle();
+
         arguments.putString(
                 WeatherDetailFragment.ARG_CITY,
                 city
         );
+
         arguments.putString(
                 WeatherDetailFragment.ARG_REGION,
                 region
         );
+
         arguments.putString(
                 WeatherDetailFragment.ARG_TEMPERATURE_C,
                 temperatureC
         );
+
         arguments.putString(
                 WeatherDetailFragment.ARG_TEMPERATURE_F,
                 temperatureF
         );
+
         arguments.putString(
                 WeatherDetailFragment.ARG_CONDITION,
                 condition
         );
+
         arguments.putString(
                 WeatherDetailFragment.ARG_FEELS_LIKE,
                 feelsLike
         );
+
         arguments.putString(
                 WeatherDetailFragment.ARG_HUMIDITY,
                 humidity
         );
+
         arguments.putString(
                 WeatherDetailFragment.ARG_WIND,
                 wind
         );
 
-        // Attaches the Bundle to the detail fragment
-        detailFragment.setArguments(arguments);
-
-        // Replaces the current content with the detail screen
-        // addToBackStack lets the toolbar and system Back return to Search
-        getParentFragmentManager()
-                .beginTransaction()
-                .replace(
-                        R.id.fragmentContainer,
-                        detailFragment
-                )
-                .addToBackStack("weather_detail")
-                .commit();
+        // MainActivity opens the detail fragment over the Search screen
+        // This preserves the Search, Saved, and Settings fragments underneath
+        MainActivity activity = (MainActivity) requireActivity();
+        activity.openWeatherDetail(arguments);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
 
-        // Clears the old view reference when the fragment view is destroyed
+        // Clears the old layout reference when the view is destroyed
         binding = null;
     }
 }

@@ -5,6 +5,8 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.view.View;
+
 import com.mariammueen.weathertrio.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
@@ -42,6 +44,20 @@ public class MainActivity extends AppCompatActivity {
         // Connects MainActivity to activity_main.xml using ViewBinding
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        // Watches for changes to the fragment back stack
+        // This restores the bottom navigation after leaving Weather Details
+        getSupportFragmentManager()
+                .addOnBackStackChangedListener(() -> {
+
+                    boolean detailScreenOpen =
+                            getSupportFragmentManager()
+                                    .getBackStackEntryCount() > 0;
+
+                    binding.bottomNavigation.setVisibility(
+                            detailScreenOpen ? View.GONE : View.VISIBLE
+                    );
+                });
 
         if (savedInstanceState == null) {
             // Creates each fragment only the first time activity opens
@@ -111,6 +127,31 @@ public class MainActivity extends AppCompatActivity {
 
         // Selects Search on first launch or restores previous tab
         binding.bottomNavigation.setSelectedItemId(selectedTabId);
+    }
+
+    public void openWeatherDetail(Bundle arguments) {
+        // Creates the separate weather detail screen
+        WeatherDetailFragment detailFragment =
+                new WeatherDetailFragment();
+
+        // Gives the selected city's Bundle data to the detail fragment
+        detailFragment.setArguments(arguments);
+
+        // Hides the bottom navigation while the detail screen is open
+        // The detail screen is not one of the three main tabs
+        binding.bottomNavigation.setVisibility(View.GONE);
+
+        // Adds the detail fragment on top of the current tab
+        // The Search fragment remains underneath instead of being replaced
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(
+                        R.id.fragmentContainer,
+                        detailFragment,
+                        "weather_detail"
+                )
+                .addToBackStack("weather_detail")
+                .commit();
     }
 
     private Fragment getFragmentForTab(int itemId) {
