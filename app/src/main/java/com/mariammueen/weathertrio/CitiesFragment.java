@@ -31,7 +31,10 @@ public class CitiesFragment extends Fragment {
 
             activity.showCityDetails(
                     getString(R.string.city_toronto),
-                    getString(R.string.weather_toronto)
+                    getString(R.string.temperature_toronto),
+                    getString(R.string.condition_toronto),
+                    getString(R.string.humidity_toronto),
+                    getString(R.string.wind_toronto)
             );
         });
     
@@ -41,7 +44,10 @@ public class CitiesFragment extends Fragment {
 
             activity.showCityDetails(
                     getString(R.string.city_vancouver),
-                    getString(R.string.weather_vancouver)
+                    getString(R.string.temperature_vancouver),
+                    getString(R.string.condition_vancouver),
+                    getString(R.string.humidity_vancouver),
+                    getString(R.string.wind_vancouver)
             );
         });
 
@@ -51,7 +57,10 @@ public class CitiesFragment extends Fragment {
 
             activity.showCityDetails(
                     getString(R.string.city_calgary),
-                    getString(R.string.weather_calgary)
+                    getString(R.string.temperature_calgary),
+                    getString(R.string.condition_calgary),
+                    getString(R.string.humidity_calgary),
+                    getString(R.string.wind_calgary)
             );
         });
 
@@ -61,7 +70,10 @@ public class CitiesFragment extends Fragment {
 
             activity.showCityDetails(
                     getString(R.string.city_ottawa),
-                    getString(R.string.weather_ottawa)
+                    getString(R.string.temperature_ottawa),
+                    getString(R.string.condition_ottawa),
+                    getString(R.string.humidity_ottawa),
+                    getString(R.string.wind_ottawa)
             );
         });
 
@@ -71,7 +83,10 @@ public class CitiesFragment extends Fragment {
 
             activity.showCityDetails(
                     getString(R.string.city_halifax),
-                    getString(R.string.weather_halifax)
+                    getString(R.string.temperature_halifax),
+                    getString(R.string.condition_halifax),
+                    getString(R.string.humidity_halifax),
+                    getString(R.string.wind_halifax)
             );
         });
 

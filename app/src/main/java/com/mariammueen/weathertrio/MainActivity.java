@@ -58,8 +58,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // Method to show city details in the DetailsFragment
-    public void showCityDetails(String city, String weather) {
-        detailsFragment.setCityDetails(city, weather);
+    public void showCityDetails(
+            String city, 
+            String temperature, 
+            String condition, 
+            String humidity, 
+            String wind) {
+        detailsFragment.setCityDetails(
+            city, 
+            temperature, 
+            condition, 
+            humidity, 
+            wind);
 
         showFragment(detailsFragment);
         binding.bottomNavigation.setSelectedItemId(R.id.navigation_details);

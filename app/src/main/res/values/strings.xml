@@ -12,23 +12,56 @@
     <string name="cities_title">Canadian Cities</string>
     <string name="cities_subtitle">Select a city to view its weather details.</string>
 
+    <!-- Toronto -->
     <string name="city_toronto">Toronto</string>
     <string name="weather_toronto">18°C · Partly cloudy</string>
+    <string name="temperature_toronto">18°C</string>
+    <!-- additional -->
+    <string name="condition_toronto">Partly cloudy</string>
+    <string name="humidity_toronto">Humidity: 62%</string>
+    <string name="wind_toronto">Wind: 14 km/h</string>
 
+    <!-- Vancouver -->
     <string name="city_vancouver">Vancouver</string>
     <string name="weather_vancouver">15°C · Light rain</string>
+    <string name="temperature_vancouver">15°C</string>
+    <!-- additional -->
+    <string name="condition_vancouver">Light rain</string>
+    <string name="humidity_vancouver">Humidity: 78%</string>
+    <string name="wind_vancouver">Wind: 9 km/h</string>
 
+    <!-- Calgary -->
     <string name="city_calgary">Calgary</string>
     <string name="weather_calgary">12°C · Windy</string>
+    <string name="temperature_calgary">12°C</string>
+    <!-- additional -->
+    <string name="condition_calgary">Windy</string>
+    <string name="humidity_calgary">Humidity: 44%</string>
+    <string name="wind_calgary">Wind: 28 km/h</string>
 
+    <!-- Ottawa -->
     <string name="city_ottawa">Ottawa</string>
     <string name="weather_ottawa">17°C · Sunny</string>
+    <string name="temperature_ottawa">17°C</string>
+    <!-- additional -->
+    <string name="condition_ottawa">Sunny</string>
+    <string name="humidity_ottawa">Humidity: 55%</string>
+    <string name="wind_ottawa">Wind: 11 km/h</string>
 
+    <!-- Halifax -->
     <string name="city_halifax">Halifax</string>
     <string name="weather_halifax">14°C · Cloudy</string>
+    <string name="temperature_halifax">14°C</string>
+    <!-- additional -->
+    <string name="condition_halifax">Cloudy</string>
+    <string name="humidity_halifax">Humidity: 71%</string>
+    <string name="wind_halifax">Wind: 18 km/h</string>
 
 <!-- Details -->
     <string name="details_no_city">No city selected</string>
     <string name="details_select_city">Select a city from the Cities tab.</string>
-    
+    <string name="details_temperature_placeholder">--°C</string>
+    <string name="details_humidity_placeholder">Humidity: --</string>
+    <string name="details_wind_placeholder">Wind: --</string>
+
 </resources>

@@ -1,26 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_main"
-    android:gravity="center"
-    android:orientation="vertical"
-    android:padding="24dp">
+    android:fillViewport="true">
 
-    <TextView
-        android:id="@+id/textCityName"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/details_no_city"
-        android:textAppearance="@style/TextAppearance.WeatherTrio.Headline" />
+        android:orientation="vertical"
+        android:padding="24dp">
 
-    <TextView
-        android:id="@+id/textWeatherSummary"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="@string/details_select_city"
-        android:textAppearance="@style/TextAppearance.WeatherTrio.Body" />
+        <TextView
+            android:id="@+id/textCityName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/details_no_city"
+            android:textAppearance="@style/TextAppearance.WeatherTrio.Headline" />
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/textCondition"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/details_select_city"
+            android:textAppearance="@style/TextAppearance.WeatherTrio.Body" />
+
+        <TextView
+            android:id="@+id/textTemperature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:text="@string/details_temperature_placeholder"
+            android:textAppearance="@style/TextAppearance.WeatherTrio.Headline"
+            android:textSize="42sp" />
+
+        <TextView
+            android:id="@+id/textHumidity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="@string/details_humidity_placeholder"
+            android:textAppearance="@style/TextAppearance.WeatherTrio.Body"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/textWind"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/details_wind_placeholder"
+            android:textAppearance="@style/TextAppearance.WeatherTrio.Body"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+</ScrollView>

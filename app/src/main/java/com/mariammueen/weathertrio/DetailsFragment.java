@@ -16,16 +16,37 @@ public class DetailsFragment extends Fragment {
     private FragmentDetailsBinding binding;
 
     private String selectedCity;
-    private String selectedWeather;
+    private String selectedTemperature;
+    private String selectedCondition;
+    private String selectedHumidity;
+    private String selectedWind;
 
-    public void setCityDetails(String city, String weather) {
+    public void setCityDetails(
+            String city,
+            String temperature,
+            String condition,
+            String humidity,
+            String wind
+    ) {
         selectedCity = city;
-        selectedWeather = weather;
+        selectedTemperature = temperature;
+        selectedCondition = condition;
+        selectedHumidity = humidity;
+        selectedWind = wind;
 
-        if (binding != null) {
-            binding.textCityName.setText(city);
-            binding.textWeatherSummary.setText(weather);
+        updateDetails();
+    }
+
+    private void updateDetails() {
+        if (binding == null || selectedCity == null) {
+            return;
         }
+
+        binding.textCityName.setText(selectedCity);
+        binding.textTemperature.setText(selectedTemperature);
+        binding.textCondition.setText(selectedCondition);
+        binding.textHumidity.setText(selectedHumidity);
+        binding.textWind.setText(selectedWind);
     }
 
     @Nullable
@@ -36,12 +57,7 @@ public class DetailsFragment extends Fragment {
             @Nullable Bundle savedInstanceState
     ) {
         binding = FragmentDetailsBinding.inflate(inflater, container, false);
-
-        if (selectedCity != null && selectedWeather != null) {
-            binding.textCityName.setText(selectedCity);
-            binding.textWeatherSummary.setText(selectedWeather);
-        }
-
+        updateDetails();
         return binding.getRoot();
     }
 
