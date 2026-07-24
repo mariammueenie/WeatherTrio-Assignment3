@@ -16,6 +16,9 @@
     <string name="search_hint">Search cities</string>
     <string name="search_city_placeholder">Required city cards will appear here.</string>
 
+<!-- Saved screen title -->
+    <string name="saved_title">Saved</string>
+
 <!-- Required Search screen cities -->
     <!-- London -->
     <string name="city_london">London</string>
