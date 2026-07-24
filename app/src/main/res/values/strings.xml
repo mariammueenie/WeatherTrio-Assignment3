@@ -6,9 +6,9 @@
 <!-- Splash screen -->
     <string name="splash_subtitle">Weather for three simple moments.</string>
 
-<!-- Bottom Navigation -->
-    <string name="nav_cities">Cities</string>
-    <string name="nav_details">Details</string>
+<!-- Bottom navigation labels -->
+    <string name="nav_search">Search</string>
+    <string name="nav_saved">Saved</string>
     <string name="nav_settings">Settings</string>
 
 <!-- City data hardcoded -->
@@ -73,5 +73,9 @@
     <string name="settings_wifi">Wi-Fi Settings</string>
     <string name="settings_location">Location Settings</string>
     <string name="settings_app">App Settings</string>
+
+<!-- Saved screen -->
+    <string name="saved_empty_message">No saved cities yet</string>
+    <string name="saved_empty_icon_description">Empty saved cities icon</string>
 
 </resources>

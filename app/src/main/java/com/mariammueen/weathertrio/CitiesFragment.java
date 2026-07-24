@@ -13,6 +13,8 @@ import com.mariammueen.weathertrio.databinding.FragmentCitiesBinding;
 
 public class CitiesFragment extends Fragment {
 
+    // Gives access to the views inside fragment_cities.xml
+    // This fragment temporarily acts as the Search screen
     private FragmentCitiesBinding binding;
 
     @Nullable
@@ -22,73 +24,22 @@ public class CitiesFragment extends Fragment {
             @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState
     ) {
-        binding = FragmentCitiesBinding.inflate(inflater, container, false);
+        // Creates the current city-list layout using ViewBinding
+        binding = FragmentCitiesBinding.inflate(
+                inflater,
+                container,
+                false
+        );
 
-    // Set click listeners for each city card
-        // Toronto Card Listener
-        binding.cardToronto.setOnClickListener(view -> {
-            MainActivity activity = (MainActivity) requireActivity();
-
-            activity.showCityDetails(
-                    getString(R.string.city_toronto),
-                    getString(R.string.temperature_toronto),
-                    getString(R.string.condition_toronto),
-                    getString(R.string.humidity_toronto),
-                    getString(R.string.wind_toronto)
-            );
-        });
-    
-        // Vancouver Card Listener
-        binding.cardVancouver.setOnClickListener(view -> {
-            MainActivity activity = (MainActivity) requireActivity();
-
-            activity.showCityDetails(
-                    getString(R.string.city_vancouver),
-                    getString(R.string.temperature_vancouver),
-                    getString(R.string.condition_vancouver),
-                    getString(R.string.humidity_vancouver),
-                    getString(R.string.wind_vancouver)
-            );
-        });
-
-        // Calgary Card Listener
-        binding.cardCalgary.setOnClickListener(view -> {
-            MainActivity activity = (MainActivity) requireActivity();
-
-            activity.showCityDetails(
-                    getString(R.string.city_calgary),
-                    getString(R.string.temperature_calgary),
-                    getString(R.string.condition_calgary),
-                    getString(R.string.humidity_calgary),
-                    getString(R.string.wind_calgary)
-            );
-        });
-
-        // Ottawa Card Listener
-        binding.cardOttawa.setOnClickListener(view -> {
-            MainActivity activity = (MainActivity) requireActivity();
-
-            activity.showCityDetails(
-                    getString(R.string.city_ottawa),
-                    getString(R.string.temperature_ottawa),
-                    getString(R.string.condition_ottawa),
-                    getString(R.string.humidity_ottawa),
-                    getString(R.string.wind_ottawa)
-            );
-        });
-
-        // Halifax Card Listener
-        binding.cardHalifax.setOnClickListener(view -> {
-            MainActivity activity = (MainActivity) requireActivity();
-
-            activity.showCityDetails(
-                    getString(R.string.city_halifax),
-                    getString(R.string.temperature_halifax),
-                    getString(R.string.condition_halifax),
-                    getString(R.string.humidity_halifax),
-                    getString(R.string.wind_halifax)
-            );
-        });
+        /*
+         * The previous card listeners were removed temporarily.
+         *
+         * They depended on Details being a bottom-navigation tab,
+         * which does not match the assignment requirements.
+         *
+         * will add new listeners later that open a separate
+         * WeatherDetailFragment and pass the selected city in a Bundle.
+         */
 
         return binding.getRoot();
     }
@@ -96,6 +47,8 @@ public class CitiesFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+
+        // Clears the binding when this fragment's view is destroyed
         binding = null;
     }
 }

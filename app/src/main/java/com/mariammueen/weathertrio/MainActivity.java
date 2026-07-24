@@ -9,76 +9,93 @@ import com.mariammueen.weathertrio.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
 
-    // Keys used to identify fragments when Android restores activity
-    private static final String TAG_CITIES = "cities";
-    private static final String TAG_DETAILS = "details";
+    // Tags help Android find same fragments again after recreation
+    private static final String TAG_SEARCH = "search";
+    private static final String TAG_SAVED = "saved";
     private static final String TAG_SETTINGS = "settings";
 
-    // Stores selected bottom navigation item
-    // lets app reopen same tab after activity recreation
+    // Saves which bottom navigation tab was selected
     private static final String KEY_SELECTED_TAB = "selected_tab";
 
-    // Gives access to views inside activity_main.xml
+    // Gives access to the views in activity_main.xml
     private ActivityMainBinding binding;
 
-    private CitiesFragment citiesFragment;
-    private DetailsFragment detailsFragment;
+    // CitiesFragment is temporarily acting as required Search screen
+    // will rename it to SearchFragment in later step
+    private CitiesFragment searchFragment;
+
+    // SavedFragment shows required empty-state screen
+    private SavedFragment savedFragment;
+
+    // SettingsFragment contains app settings options
     private SettingsFragment settingsFragment;
 
-    // Keeps track of fragment currently visible
+    // Tracks which fragment is currently visible
     private Fragment activeFragment;
 
-    // Cities is default tab when app first opens
-    private int selectedTabId = R.id.navigation_cities;
+    // Search is default tab when app first opens
+    private int selectedTabId = R.id.navigation_search;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Connects activity to activity_main.xml using ViewBinding
+        // Connects MainActivity to activity_main.xml using ViewBinding
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         if (savedInstanceState == null) {
-            // Creates new fragments first time the activity opens
-            citiesFragment = new CitiesFragment();
-            detailsFragment = new DetailsFragment();
+            // Creates each fragment only the first time activity opens
+            searchFragment = new CitiesFragment();
+            savedFragment = new SavedFragment();
             settingsFragment = new SettingsFragment();
 
-            activeFragment = citiesFragment;
+            activeFragment = searchFragment;
 
             // Adds all three fragments once
-            // Details and Settings start hidden while Cities remains visible
+            // Saved and Settings start hidden so Search appears first
             getSupportFragmentManager()
                     .beginTransaction()
-                    .add(R.id.fragmentContainer, settingsFragment, TAG_SETTINGS)
+                    .add(
+                            R.id.fragmentContainer,
+                            settingsFragment,
+                            TAG_SETTINGS
+                    )
                     .hide(settingsFragment)
-                    .add(R.id.fragmentContainer, detailsFragment, TAG_DETAILS)
-                    .hide(detailsFragment)
-                    .add(R.id.fragmentContainer, citiesFragment, TAG_CITIES)
+                    .add(
+                            R.id.fragmentContainer,
+                            savedFragment,
+                            TAG_SAVED
+                    )
+                    .hide(savedFragment)
+                    .add(
+                            R.id.fragmentContainer,
+                            searchFragment,
+                            TAG_SEARCH
+                    )
                     .commit();
         } else {
-            // Retrieves fragments Android already restored
-            // prevents duplicate fragment instances from being created
-            citiesFragment = (CitiesFragment) getSupportFragmentManager()
-                    .findFragmentByTag(TAG_CITIES);
+            // Reuses fragments Android already restored
+            // avoids creating duplicate fragment instances
+            searchFragment = (CitiesFragment) getSupportFragmentManager()
+                    .findFragmentByTag(TAG_SEARCH);
 
-            detailsFragment = (DetailsFragment) getSupportFragmentManager()
-                    .findFragmentByTag(TAG_DETAILS);
+            savedFragment = (SavedFragment) getSupportFragmentManager()
+                    .findFragmentByTag(TAG_SAVED);
 
             settingsFragment = (SettingsFragment) getSupportFragmentManager()
                     .findFragmentByTag(TAG_SETTINGS);
 
-            // Restores tab that was selected before recreation
+            // Restores previously selected bottom tab
             selectedTabId = savedInstanceState.getInt(
                     KEY_SELECTED_TAB,
-                    R.id.navigation_cities
+                    R.id.navigation_search
             );
 
             activeFragment = getFragmentForTab(selectedTabId);
         }
 
-        // Changes fragments when bottom navigation item is selected
+        // Switches fragments when user selects bottom tab
         binding.bottomNavigation.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
 
@@ -94,18 +111,18 @@ public class MainActivity extends AppCompatActivity {
             return true;
         });
 
-        // Displays saved tab or Cities when app first opens
+        // Selects Search on first launch or restores previous tab
         binding.bottomNavigation.setSelectedItemId(selectedTabId);
     }
 
     private Fragment getFragmentForTab(int itemId) {
-        // Matches each navigation item with its fragment
-        if (itemId == R.id.navigation_cities) {
-            return citiesFragment;
+        // Matches each bottom navigation item with fragment
+        if (itemId == R.id.navigation_search) {
+            return searchFragment;
         }
 
-        if (itemId == R.id.navigation_details) {
-            return detailsFragment;
+        if (itemId == R.id.navigation_saved) {
+            return savedFragment;
         }
 
         if (itemId == R.id.navigation_settings) {
@@ -116,12 +133,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showFragment(Fragment fragment) {
-        // Avoids performing unnecessary transaction
-        // when selected fragment is already visible
+        // Avoids unnecessary transaction if the tab is already visible
         if (fragment == activeFragment) {
             return;
         }
 
+        // Hides current fragment and shows the selected one
+        // show/hide preserves fragment state between tab switches
         getSupportFragmentManager()
                 .beginTransaction()
                 .hide(activeFragment)
@@ -131,31 +149,9 @@ public class MainActivity extends AppCompatActivity {
         activeFragment = fragment;
     }
 
-    public void showCityDetails(
-            String city,
-            String temperature,
-            String condition,
-            String humidity,
-            String wind
-    ) {
-        // Sends selected city's information to DetailsFragment
-        detailsFragment.setCityDetails(
-                city,
-                temperature,
-                condition,
-                humidity,
-                wind
-        );
-
-        // Selecting Details item also changes the visible fragment
-        binding.bottomNavigation.setSelectedItemId(
-                R.id.navigation_details
-        );
-    }
-
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        // Saves currently selected tab before Android recreates activity
+        // Saves selected tab before Android recreates the activity
         outState.putInt(KEY_SELECTED_TAB, selectedTabId);
 
         super.onSaveInstanceState(outState);
