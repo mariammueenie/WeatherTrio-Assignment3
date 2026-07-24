@@ -39,8 +39,7 @@
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:contentDescription="@string/saved_empty_icon_description"
-            android:src="@android:drawable/btn_star_big_off"
-            android:tint="@color/secondary" />
+            android:src="@drawable/ic_saved_empty" />
 
         <!-- Explains why Saved screen currently has no content -->
         <TextView

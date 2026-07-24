@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- Opens screen used to search and browse cities -->
+    <!-- Search tab -->
     <item
         android:id="@+id/navigation_search"
-        android:icon="@android:drawable/ic_menu_search"
+        android:icon="@drawable/ic_search"
         android:title="@string/nav_search" />
 
-    <!-- Opens user's saved-city screen -->
+    <!-- Saved tab -->
     <item
         android:id="@+id/navigation_saved"
-        android:icon="@android:drawable/btn_star_big_off"
+        android:icon="@drawable/ic_saved"
         android:title="@string/nav_saved" />
 
-    <!-- Opens application settings screen -->
+    <!-- Settings tab -->
     <item
         android:id="@+id/navigation_settings"
-        android:icon="@android:drawable/ic_menu_preferences"
+        android:icon="@drawable/ic_settings"
         android:title="@string/nav_settings" />
 
 </menu>
