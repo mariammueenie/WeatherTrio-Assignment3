@@ -8,8 +8,8 @@
     android:orientation="vertical">
 
     <!--
-        Displays required Settings screen title.
-        Using the same toolbar style keeps all three main screens consistent.
+        Displays the required Settings screen title.
+        This keeps the screen consistent with Search and Saved.
     -->
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbarSettings"
@@ -19,10 +19,7 @@
         app:title="@string/settings_title"
         app:titleTextColor="@color/text_primary" />
 
-    <!--
-        Holds Settings screen content below the toolbar.
-        The current buttons will be replaced with the required settings options later.
-    -->
+    <!-- Holds the settings content below the toolbar -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -30,45 +27,58 @@
         android:orientation="vertical"
         android:padding="24dp">
 
-        <!-- Brief explanation of what Settings screen contains -->
+        <!--
+            Shows the app version.
+            The actual version value will be inserted from BuildConfig in Java.
+        -->
         <TextView
+            android:id="@+id/textAppVersion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            android:text="@string/settings_subtitle"
+            android:text="@string/settings_version_placeholder"
             android:textAppearance="@style/TextAppearance.WeatherTrio.Body" />
 
         <!--
-            Temporary Wi-Fi button.
-            will be replaced later with the required Send Feedback option.
+            Opens the user's email app with feedback information pre-filled.
+            The icon appears before the label as required.
         -->
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/buttonWifiSettings"
+            android:id="@+id/buttonSendFeedback"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/settings_wifi" />
+            android:layout_marginTop="24dp"
+            android:text="@string/settings_send_feedback"
+            app:icon="@android:drawable/ic_dialog_email"
+            app:iconGravity="textStart"
+            app:iconPadding="12dp" />
 
         <!--
-            Temporary location button.
-            will be replaced later with the required GitHub or Website option.
+            Opens a GitHub page or website in the user's browser.
+            The browser Intent will be connected in SettingsFragment.
         -->
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/buttonLocationSettings"
+            android:id="@+id/buttonViewWebsite"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:text="@string/settings_location" />
+            android:text="@string/settings_view_website"
+            app:icon="@android:drawable/ic_menu_view"
+            app:iconGravity="textStart"
+            app:iconPadding="12dp" />
 
         <!--
-            Temporary app-settings button.
-            will be replaced later with the required Share App option.
+            Opens the Android share sheet.
+            This lets the user share a short message about WeatherTrio.
         -->
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/buttonAppSettings"
+            android:id="@+id/buttonShareApp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:text="@string/settings_app" />
+            android:text="@string/settings_share_app"
+            app:icon="@android:drawable/ic_menu_share"
+            app:iconGravity="textStart"
+            app:iconPadding="12dp" />
 
     </LinearLayout>
 

@@ -59,10 +59,11 @@
 
 <!-- Settings -->
     <string name="settings_title">Settings</string>
-    <string name="settings_subtitle">Open your device settings for weather-related options.</string>
-    <string name="settings_wifi">Wi-Fi Settings</string>
-    <string name="settings_location">Location Settings</string>
-    <string name="settings_app">App Settings</string>
+    <string name="settings_version_placeholder">Version</string>
+    <string name="settings_version_format">Version %1$s</string>
+    <string name="settings_send_feedback">Send Feedback</string>
+    <string name="settings_view_website">View on GitHub</string>
+    <string name="settings_share_app">Share App</string>
 
 <!-- Saved screen -->
     <string name="saved_empty_message">No saved cities yet</string>
