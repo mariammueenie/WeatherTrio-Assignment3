@@ -1,8 +1,46 @@
+<!-- Basic theme -->
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
     <style
         name="Theme.WeatherTrio"
-        parent="Theme.Material3.DayNight.NoActionBar" />
+        parent="Theme.Material3.Dark.NoActionBar">
+
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorOnPrimary">@color/text_primary</item>
+
+        <item name="colorSecondary">@color/secondary</item>
+        <item name="colorOnSecondary">@color/background_main</item>
+
+        <item name="colorSurface">@color/surface</item>
+        <item name="colorOnSurface">@color/text_primary</item>
+
+        <item name="android:colorBackground">@color/background_main</item>
+        <item name="android:windowBackground">@color/background_main</item>
+
+        <item name="textAppearanceHeadlineMedium">@style/TextAppearance.WeatherTrio.Headline</item>
+        <item name="textAppearanceBodyMedium">@style/TextAppearance.WeatherTrio.Body</item>
+
+    </style>
+
+    <style
+        name="TextAppearance.WeatherTrio.Headline"
+        parent="TextAppearance.Material3.HeadlineMedium">
+
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textSize">28sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+
+    </style>
+
+    <style
+        name="TextAppearance.WeatherTrio.Body"
+        parent="TextAppearance.Material3.BodyMedium">
+
+        <item name="android:textColor">@color/text_secondary</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:fontFamily">sans-serif</item>
+
+    </style>
 
 </resources>

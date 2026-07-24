@@ -1,0 +1,13 @@
+<!-- Basic colours -->
+
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="background_main">#08020E</color>
+    <color name="surface">#181020</color>
+
+    <color name="primary">#9A35FF</color>
+    <color name="secondary">#00D4FF</color>
+
+    <color name="text_primary">#F8F1FF</color>
+    <color name="text_secondary">#C4B4D2</color>
+</resources>
