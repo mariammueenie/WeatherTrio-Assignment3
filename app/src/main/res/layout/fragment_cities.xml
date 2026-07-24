@@ -63,10 +63,14 @@
 
         </com.google.android.material.card.MaterialCardView>
 
+        <!-- Vancouver Card  -->
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardVancouver"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
+            android:clickable="true"
+            android:focusable="true"
             app:cardBackgroundColor="@color/surface"
             app:cardCornerRadius="16dp"
             app:cardElevation="2dp">
@@ -95,10 +99,14 @@
 
         </com.google.android.material.card.MaterialCardView>
 
+        <!-- Calgary Card  -->
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardCalgary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
+            android:clickable="true"
+            android:focusable="true"
             app:cardBackgroundColor="@color/surface"
             app:cardCornerRadius="16dp"
             app:cardElevation="2dp">
@@ -127,10 +135,14 @@
 
         </com.google.android.material.card.MaterialCardView>
 
+        <!-- Ottawa Card  -->
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardOttawa"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
+            android:clickable="true"
+            android:focusable="true"
             app:cardBackgroundColor="@color/surface"
             app:cardCornerRadius="16dp"
             app:cardElevation="2dp">
@@ -159,10 +171,14 @@
 
         </com.google.android.material.card.MaterialCardView>
 
+        <!-- Halifax Card  -->
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardHalifax"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
+            android:clickable="true"
+            android:focusable="true"
             app:cardBackgroundColor="@color/surface"
             app:cardCornerRadius="16dp"
             app:cardElevation="2dp">

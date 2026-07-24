@@ -24,12 +24,54 @@ public class CitiesFragment extends Fragment {
     ) {
         binding = FragmentCitiesBinding.inflate(inflater, container, false);
 
+    // Set click listeners for each city card
+        // Toronto Card Listener
         binding.cardToronto.setOnClickListener(view -> {
             MainActivity activity = (MainActivity) requireActivity();
 
             activity.showCityDetails(
                     getString(R.string.city_toronto),
                     getString(R.string.weather_toronto)
+            );
+        });
+    
+        // Vancouver Card Listener
+        binding.cardVancouver.setOnClickListener(view -> {
+            MainActivity activity = (MainActivity) requireActivity();
+
+            activity.showCityDetails(
+                    getString(R.string.city_vancouver),
+                    getString(R.string.weather_vancouver)
+            );
+        });
+
+        // Calgary Card Listener
+        binding.cardCalgary.setOnClickListener(view -> {
+            MainActivity activity = (MainActivity) requireActivity();
+
+            activity.showCityDetails(
+                    getString(R.string.city_calgary),
+                    getString(R.string.weather_calgary)
+            );
+        });
+
+        // Ottawa Card Listener
+        binding.cardOttawa.setOnClickListener(view -> {
+            MainActivity activity = (MainActivity) requireActivity();
+
+            activity.showCityDetails(
+                    getString(R.string.city_ottawa),
+                    getString(R.string.weather_ottawa)
+            );
+        });
+
+        // Halifax Card Listener
+        binding.cardHalifax.setOnClickListener(view -> {
+            MainActivity activity = (MainActivity) requireActivity();
+
+            activity.showCityDetails(
+                    getString(R.string.city_halifax),
+                    getString(R.string.weather_halifax)
             );
         });
 
