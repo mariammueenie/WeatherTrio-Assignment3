@@ -20,9 +20,8 @@ public class MainActivity extends AppCompatActivity {
     // Gives access to the views in activity_main.xml
     private ActivityMainBinding binding;
 
-    // CitiesFragment is temporarily acting as required Search screen
-    // will rename it to SearchFragment in later step
-    private CitiesFragment searchFragment;
+    // SearchFragment contains the required city search screen
+    private SearchFragment searchFragment;
 
     // SavedFragment shows required empty-state screen
     private SavedFragment savedFragment;
@@ -46,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (savedInstanceState == null) {
             // Creates each fragment only the first time activity opens
-            searchFragment = new CitiesFragment();
+            searchFragment = new SearchFragment();
             savedFragment = new SavedFragment();
             settingsFragment = new SettingsFragment();
 
@@ -75,9 +74,8 @@ public class MainActivity extends AppCompatActivity {
                     )
                     .commit();
         } else {
-            // Reuses fragments Android already restored
-            // avoids creating duplicate fragment instances
-            searchFragment = (CitiesFragment) getSupportFragmentManager()
+            // Reuses SearchFragments Android already restored
+            searchFragment = (SearchFragment) getSupportFragmentManager()
                     .findFragmentByTag(TAG_SEARCH);
 
             savedFragment = (SavedFragment) getSupportFragmentManager()
