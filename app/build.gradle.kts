@@ -46,6 +46,19 @@ dependencies {
     implementation(libs.activity)
     implementation(libs.constraintlayout)
 
+    // RecyclerView displays the required scrolling list of weather locations.
+    // Version 1.3.2 is used because this project compiles against Android API 34.
+    implementation("androidx.recyclerview:recyclerview:1.3.2")
+
+    // ViewModel stores and manages UI-related data.
+    implementation("androidx.lifecycle:lifecycle-viewmodel:2.8.7")
+
+    // LiveData allows the Fragment to observe weather, loading, and error states.
+    implementation("androidx.lifecycle:lifecycle-livedata:2.8.7")
+
+    // OkHttp performs the WeatherAPI network request asynchronously.
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
