@@ -1,4 +1,12 @@
-package com.mariammueen.weathertrio;
+package com.mariammueen.weathertrio.view;
+
+import com.mariammueen.weathertrio.R;
+import com.mariammueen.weathertrio.databinding.FragmentSearchBinding;
+import com.mariammueen.weathertrio.databinding.FragmentWeatherDetailBinding;
+import com.mariammueen.weathertrio.databinding.FragmentSavedBinding;
+import com.mariammueen.weathertrio.databinding.FragmentSettingsBinding;
+import com.mariammueen.weathertrio.databinding.ActivityMainBinding;
+import com.mariammueen.weathertrio.databinding.ActivitySplashBinding;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

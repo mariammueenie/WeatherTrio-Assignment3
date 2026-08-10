@@ -1,4 +1,4 @@
-package com.mariammueen.weathertrio;
+package com.mariammueen.weathertrio.view;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,6 +13,14 @@ import androidx.lifecycle.ViewModelProvider;
 import com.mariammueen.weathertrio.databinding.FragmentWeatherDetailBinding;
 import com.mariammueen.weathertrio.model.WeatherData;
 import com.mariammueen.weathertrio.viewmodel.WeatherViewModel;
+
+import com.mariammueen.weathertrio.R;
+import com.mariammueen.weathertrio.databinding.FragmentSearchBinding;
+import com.mariammueen.weathertrio.databinding.FragmentWeatherDetailBinding;
+import com.mariammueen.weathertrio.databinding.FragmentSavedBinding;
+import com.mariammueen.weathertrio.databinding.FragmentSettingsBinding;
+import com.mariammueen.weathertrio.databinding.ActivityMainBinding;
+import com.mariammueen.weathertrio.databinding.ActivitySplashBinding;
 
 /**
  * Displays live weather information for the city selected

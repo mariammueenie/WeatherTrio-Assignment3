@@ -1,4 +1,4 @@
-package com.mariammueen.weathertrio;
+package com.mariammueen.weathertrio.view;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +7,14 @@ import android.os.Looper;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.mariammueen.weathertrio.databinding.ActivitySplashBinding;
+
+import com.mariammueen.weathertrio.R;
+import com.mariammueen.weathertrio.databinding.FragmentSearchBinding;
+import com.mariammueen.weathertrio.databinding.FragmentWeatherDetailBinding;
+import com.mariammueen.weathertrio.databinding.FragmentSavedBinding;
+import com.mariammueen.weathertrio.databinding.FragmentSettingsBinding;
+import com.mariammueen.weathertrio.databinding.ActivityMainBinding;
 import com.mariammueen.weathertrio.databinding.ActivitySplashBinding;
 
 public class SplashActivity extends AppCompatActivity {

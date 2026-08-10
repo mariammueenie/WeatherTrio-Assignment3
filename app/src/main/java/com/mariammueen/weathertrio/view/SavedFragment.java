@@ -1,4 +1,4 @@
-package com.mariammueen.weathertrio;
+package com.mariammueen.weathertrio.view;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,6 +10,14 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.mariammueen.weathertrio.databinding.FragmentSavedBinding;
+
+import com.mariammueen.weathertrio.R;
+import com.mariammueen.weathertrio.databinding.FragmentSearchBinding;
+import com.mariammueen.weathertrio.databinding.FragmentWeatherDetailBinding;
+import com.mariammueen.weathertrio.databinding.FragmentSavedBinding;
+import com.mariammueen.weathertrio.databinding.FragmentSettingsBinding;
+import com.mariammueen.weathertrio.databinding.ActivityMainBinding;
+import com.mariammueen.weathertrio.databinding.ActivitySplashBinding;
 
 public class SavedFragment extends Fragment {
 
