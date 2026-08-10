@@ -8,13 +8,19 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.mariammueen.weathertrio.databinding.FragmentSearchBinding;
+import com.mariammueen.weathertrio.model.WeatherLocation;
+import com.mariammueen.weathertrio.view.WeatherLocationAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SearchFragment extends Fragment {
 
-    // Gives access to the views inside fragment_search.xml
-    // ViewBinding avoids using findViewById
+    // ViewBinding gives access to fragment_search.xml
+    // without using findViewById.
     private FragmentSearchBinding binding;
 
     @Nullable
@@ -24,143 +30,122 @@ public class SearchFragment extends Fragment {
             @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState
     ) {
-        // Creates the Search screen layout
+
         binding = FragmentSearchBinding.inflate(
                 inflater,
                 container,
                 false
         );
 
-        // Opens London's hardcoded weather details
-        binding.cardLondon.setOnClickListener(view ->
-                openWeatherDetail(
-                        getString(R.string.city_london),
-                        getString(R.string.region_london),
-                        "14",
-                        "57",
-                        "Cloudy",
-                        "12",
-                        "68",
-                        "16"
-                )
-        );
-
-        // Opens Toronto's hardcoded weather details
-        binding.cardToronto.setOnClickListener(view ->
-                openWeatherDetail(
-                        getString(R.string.city_toronto),
-                        getString(R.string.region_toronto),
-                        "18",
-                        "64",
-                        "Partly cloudy",
-                        "17",
-                        "62",
-                        "14"
-                )
-        );
-
-        // Opens Tokyo's hardcoded weather details
-        binding.cardTokyo.setOnClickListener(view ->
-                openWeatherDetail(
-                        getString(R.string.city_tokyo),
-                        getString(R.string.region_tokyo),
-                        "24",
-                        "75",
-                        "Sunny",
-                        "25",
-                        "54",
-                        "10"
-                )
-        );
-
-        // Opens Sydney's hardcoded weather details
-        binding.cardSydney.setOnClickListener(view ->
-                openWeatherDetail(
-                        getString(R.string.city_sydney),
-                        getString(R.string.region_sydney),
-                        "21",
-                        "70",
-                        "Clear",
-                        "22",
-                        "58",
-                        "19"
-                )
-        );
-
-        // Opens New York's hardcoded weather details
-        binding.cardNewYork.setOnClickListener(view ->
-                openWeatherDetail(
-                        getString(R.string.city_new_york),
-                        getString(R.string.region_new_york),
-                        "16",
-                        "61",
-                        "Rainy",
-                        "15",
-                        "73",
-                        "22"
-                )
-        );
+        setupLocationList();
 
         return binding.getRoot();
     }
 
-    private void openWeatherDetail(
-            String city,
-            String region,
-            String temperatureC,
-            String temperatureF,
-            String condition,
-            String feelsLike,
-            String humidity,
-            String wind
-    ) {
-        // Stores the selected city's information in a Bundle
-        // WeatherDetailFragment reads these values when it opens
+    /**
+     * Creates the required location models and connects them
+     * to the RecyclerView.
+     */
+    private void setupLocationList() {
+
+        List<WeatherLocation> locations = new ArrayList<>();
+
+        /*
+         * Assignment 2 requires Toronto, Montreal,
+         * and at least one additional location.
+         *
+         * The latitude and longitude are stored in the model
+         * because the rubric specifically requires them.
+         */
+        locations.add(
+                new WeatherLocation(
+                        "Toronto",
+                        "Ontario, Canada",
+                        43.6532,
+                        -79.3832
+                )
+        );
+
+        locations.add(
+                new WeatherLocation(
+                        "Montreal",
+                        "Quebec, Canada",
+                        45.5019,
+                        -73.5674
+                )
+        );
+
+        locations.add(
+                new WeatherLocation(
+                        "Barrie",
+                        "Ontario, Canada",
+                        44.3894,
+                        -79.6903
+                )
+        );
+
+        /*
+         * LinearLayoutManager displays the RecyclerView
+         * as a vertical scrolling list.
+         */
+        binding.recyclerLocations.setLayoutManager(
+                new LinearLayoutManager(requireContext())
+        );
+
+        /*
+         * The adapter takes the model list and creates
+         * one reusable card for each city.
+         */
+        WeatherLocationAdapter adapter =
+                new WeatherLocationAdapter(
+                        locations,
+                        this::openWeatherDetail
+                );
+
+        binding.recyclerLocations.setAdapter(adapter);
+    }
+
+    /**
+     * Opens the existing Weather Detail screen when
+     * the user selects a city.
+     */
+    private void openWeatherDetail(WeatherLocation location) {
+
         Bundle arguments = new Bundle();
 
+        /*
+         * For now we only pass location information.
+         *
+         * Assignment 1 passed fake temperatures and weather.
+         * Assignment 2 will fetch those values from WeatherAPI instead.
+         */
         arguments.putString(
                 WeatherDetailFragment.ARG_CITY,
-                city
+                location.getCityName()
         );
 
         arguments.putString(
                 WeatherDetailFragment.ARG_REGION,
-                region
+                location.getRegion()
         );
 
-        arguments.putString(
-                WeatherDetailFragment.ARG_TEMPERATURE_C,
-                temperatureC
+        /*
+         * Store coordinates as well because they are part
+         * of the WeatherLocation model required by the rubric.
+         */
+        arguments.putDouble(
+                "latitude",
+                location.getLatitude()
         );
 
-        arguments.putString(
-                WeatherDetailFragment.ARG_TEMPERATURE_F,
-                temperatureF
+        arguments.putDouble(
+                "longitude",
+                location.getLongitude()
         );
 
-        arguments.putString(
-                WeatherDetailFragment.ARG_CONDITION,
-                condition
-        );
+        MainActivity activity =
+                (MainActivity) requireActivity();
 
-        arguments.putString(
-                WeatherDetailFragment.ARG_FEELS_LIKE,
-                feelsLike
-        );
-
-        arguments.putString(
-                WeatherDetailFragment.ARG_HUMIDITY,
-                humidity
-        );
-
-        arguments.putString(
-                WeatherDetailFragment.ARG_WIND,
-                wind
-        );
-
-        // MainActivity opens the detail fragment over the Search screen
-        // This preserves the Search, Saved, and Settings fragments underneath
-        MainActivity activity = (MainActivity) requireActivity();
         activity.openWeatherDetail(arguments);
     }
 
@@ -168,7 +153,7 @@ public class SearchFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
 
-        // Clears the old layout reference when the view is destroyed
+        // Prevents the Fragment from holding a destroyed ViewBinding.
         binding = null;
     }
 }
