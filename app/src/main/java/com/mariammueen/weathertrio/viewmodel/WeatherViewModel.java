@@ -39,6 +39,15 @@ public class WeatherViewModel extends ViewModel {
     private final MutableLiveData<String> errorMessage =
             new MutableLiveData<>();
 
+    /*
+     * Remembers which city is currently loaded or being loaded.
+     *
+     * The ViewModel survives a screen rotation, so this lets us
+     * avoid requesting the same city's weather again when Android
+     * recreates the Fragment view.
+     */
+    private String loadedCity = null;
+
     /**
      * Exposes weather information as read-only LiveData.
      *
@@ -65,19 +74,65 @@ public class WeatherViewModel extends ViewModel {
 
     /**
      * Starts loading current weather for the selected city.
+     *
+     * If the Fragment is recreated during a screen rotation,
+     * the existing ViewModel is reused. This prevents the same
+     * request from being unnecessarily started again.
      */
     public void loadWeather(String cityName) {
 
-        Log.d(TAG, "Loading weather for " + cityName);
+        /*
+         * Do not start another request if this same city
+         * is already being loaded.
+         */
+        if (cityName.equals(loadedCity)
+                && Boolean.TRUE.equals(loading.getValue())) {
+
+            Log.d(
+                    TAG,
+                    "Weather request already running for " + cityName
+            );
+
+            return;
+        }
+
+        /*
+         * If weather for this city has already been loaded,
+         * keep the existing LiveData instead of requesting it again
+         * after a configuration change such as screen rotation.
+         */
+        WeatherData existingWeather =
+                weatherData.getValue();
+
+        if (cityName.equals(loadedCity)
+                && existingWeather != null) {
+
+            Log.d(
+                    TAG,
+                    "Reusing existing weather for " + cityName
+            );
+
+            return;
+        }
+
+        /*
+         * Remember which city this ViewModel is now loading.
+         */
+        loadedCity = cityName;
+
+        Log.d(
+                TAG,
+                "Loading weather for " + cityName
+        );
 
         /*
          * Tell the View that loading has started.
-         * The Fragment will use this to show the ProgressBar.
+         * The Fragment observes this and displays the ProgressBar.
          */
         loading.setValue(true);
 
         /*
-         * Clear any previous error before making another request.
+         * Clear any previous error before another request begins.
          */
         errorMessage.setValue(null);
 
@@ -89,10 +144,8 @@ public class WeatherViewModel extends ViewModel {
                     public void onSuccess(WeatherData result) {
 
                         /*
-                         * OkHttp callbacks happen on a background thread.
-                         *
-                         * postValue() safely updates LiveData from
-                         * that background thread.
+                         * OkHttp callbacks happen on a background thread,
+                         * so postValue() safely updates the LiveData.
                          */
                         weatherData.postValue(result);
                         loading.postValue(false);
@@ -128,12 +181,12 @@ public class WeatherViewModel extends ViewModel {
 
         /*
          * Cancel any network request that is still running.
-         *
-         * Assignment 2 specifically requires pending work
-         * to be cancelled from onCleared().
          */
         repository.cancelPendingRequests();
 
-        Log.d(TAG, "ViewModel cleared");
+        Log.d(
+                TAG,
+                "ViewModel cleared"
+        );
     }
 }
