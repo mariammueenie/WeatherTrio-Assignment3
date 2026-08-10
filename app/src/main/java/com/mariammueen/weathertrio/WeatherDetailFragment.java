@@ -8,23 +8,29 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.mariammueen.weathertrio.databinding.FragmentWeatherDetailBinding;
+import com.mariammueen.weathertrio.model.WeatherData;
+import com.mariammueen.weathertrio.viewmodel.WeatherViewModel;
 
+/**
+ * Displays live weather information for the city selected
+ * from the RecyclerView.
+ *
+ * This Fragment is part of the View layer.
+ * It does not make network requests or parse JSON.
+ */
 public class WeatherDetailFragment extends Fragment {
 
-    // Bundle keys identify each weather value passed from SearchFragment
     public static final String ARG_CITY = "city";
     public static final String ARG_REGION = "region";
-    public static final String ARG_TEMPERATURE_C = "temperature_c";
-    public static final String ARG_TEMPERATURE_F = "temperature_f";
-    public static final String ARG_CONDITION = "condition";
-    public static final String ARG_FEELS_LIKE = "feels_like";
-    public static final String ARG_HUMIDITY = "humidity";
-    public static final String ARG_WIND = "wind";
 
-    // Gives access to the views inside fragment_weather_detail.xml
     private FragmentWeatherDetailBinding binding;
+    private WeatherViewModel viewModel;
+
+    private String selectedCity = "";
+    private String selectedRegion = "";
 
     @Nullable
     @Override
@@ -33,76 +39,205 @@ public class WeatherDetailFragment extends Fragment {
             @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState
     ) {
-        // Creates the detail-screen layout using ViewBinding
+
         binding = FragmentWeatherDetailBinding.inflate(
                 inflater,
                 container,
                 false
         );
 
-        // Reads and displays the city information passed in the Bundle
-        displayWeatherDetails();
+        /*
+         * ViewModelProvider gives this Fragment its WeatherViewModel.
+         * Android keeps the ViewModel separate from the UI itself.
+         */
+        viewModel = new ViewModelProvider(this)
+                .get(WeatherViewModel.class);
 
-        // Returns to Search by removing this fragment from the back stack
-        binding.toolbarWeatherDetail.setNavigationOnClickListener(view ->
-                getParentFragmentManager().popBackStack()
-        );
+        readLocationArguments();
+        setupToolbar();
+        observeViewModel();
+
+        /*
+         * Ask the ViewModel to retrieve the selected city's
+         * live weather data.
+         */
+        viewModel.loadWeather(selectedCity);
 
         return binding.getRoot();
     }
 
-    private void displayWeatherDetails() {
+    /**
+     * Reads the city information passed from SearchFragment.
+     */
+    private void readLocationArguments() {
+
         Bundle arguments = getArguments();
 
-        // Stops safely if the fragment was opened without city data
-        if (arguments == null) {
+        if (arguments != null) {
+
+            selectedCity =
+                    arguments.getString(ARG_CITY, "");
+
+            selectedRegion =
+                    arguments.getString(ARG_REGION, "");
+        }
+
+        /*
+         * Display the location immediately while the live
+         * weather request is loading.
+         */
+        binding.textDetailCity.setText(selectedCity);
+        binding.textDetailRegion.setText(selectedRegion);
+    }
+
+    /**
+     * Configures the toolbar and back button.
+     */
+    private void setupToolbar() {
+
+        binding.toolbarWeatherDetail.setTitle(selectedCity);
+
+        binding.toolbarWeatherDetail.setNavigationOnClickListener(
+                view -> getParentFragmentManager().popBackStack()
+        );
+    }
+
+    /**
+     * Observes all LiveData exposed by WeatherViewModel.
+     *
+     * The Fragment only updates the UI when those values change.
+     */
+    private void observeViewModel() {
+
+        /*
+         * Successful weather result.
+         */
+        viewModel.getWeatherData().observe(
+                getViewLifecycleOwner(),
+                this::showWeather
+        );
+
+        /*
+         * Loading state controls the ProgressBar.
+         */
+        viewModel.getLoading().observe(
+                getViewLifecycleOwner(),
+                isLoading -> {
+
+                    if (Boolean.TRUE.equals(isLoading)) {
+
+                        binding.progressWeather.setVisibility(View.VISIBLE);
+                        binding.layoutWeatherContent.setVisibility(View.GONE);
+                        binding.textWeatherError.setVisibility(View.GONE);
+                        binding.buttonRetryWeather.setVisibility(View.GONE);
+
+                    } else {
+
+                        binding.progressWeather.setVisibility(View.GONE);
+                    }
+                }
+        );
+
+        /*
+         * Error state displays a friendly message instead
+         * of allowing a failed request to crash the app.
+         */
+        viewModel.getErrorMessage().observe(
+                getViewLifecycleOwner(),
+                message -> {
+
+                    if (message != null && !message.isEmpty()) {
+
+                        binding.layoutWeatherContent.setVisibility(View.GONE);
+
+                        binding.textWeatherError.setText(message);
+                        binding.textWeatherError.setVisibility(View.VISIBLE);
+
+                        binding.buttonRetryWeather.setVisibility(View.VISIBLE);
+                    }
+                }
+        );
+
+        /*
+         * Retry simply asks the ViewModel to try the same city again.
+         * The Fragment still does not perform any network work itself.
+         */
+        binding.buttonRetryWeather.setOnClickListener(
+                view -> viewModel.loadWeather(selectedCity)
+        );
+    }
+
+    /**
+     * Displays WeatherData returned through LiveData.
+     */
+    private void showWeather(WeatherData weatherData) {
+
+        if (weatherData == null) {
             return;
         }
 
-        // Reads each hardcoded value from the fragment Bundle
-        String city = arguments.getString(ARG_CITY, "");
-        String region = arguments.getString(ARG_REGION, "");
-        String temperatureC = arguments.getString(ARG_TEMPERATURE_C, "");
-        String temperatureF = arguments.getString(ARG_TEMPERATURE_F, "");
-        String condition = arguments.getString(ARG_CONDITION, "");
-        String feelsLike = arguments.getString(ARG_FEELS_LIKE, "");
-        String humidity = arguments.getString(ARG_HUMIDITY, "");
-        String wind = arguments.getString(ARG_WIND, "");
+        /*
+         * Hide loading/error UI and display the weather information.
+         */
+        binding.progressWeather.setVisibility(View.GONE);
+        binding.textWeatherError.setVisibility(View.GONE);
+        binding.buttonRetryWeather.setVisibility(View.GONE);
+        binding.layoutWeatherContent.setVisibility(View.VISIBLE);
 
-        // Displays the city and region
-        binding.textDetailCity.setText(city);
-        binding.textDetailRegion.setText(region);
-
-        // Combines Celsius and Fahrenheit into one readable line
-        binding.textDetailTemperature.setText(
-                getString(
-                        R.string.detail_temperature_format,
-                        temperatureC,
-                        temperatureF
-                )
+        binding.textDetailCity.setText(
+                weatherData.getCityName()
         );
 
-        // Displays the weather condition and remaining measurements
-        binding.textDetailCondition.setText(condition);
-
-        binding.textDetailFeelsLike.setText(
-                getString(R.string.detail_feels_like_format, feelsLike)
+        binding.textDetailRegion.setText(
+                weatherData.getRegion()
         );
 
-        binding.textDetailHumidity.setText(
-                getString(R.string.detail_humidity_format, humidity)
+        /*
+         * Assignment 2 requires both Celsius and Fahrenheit.
+         */
+        String temperature =
+                String.format(
+                        "%.1f°C  /  %.1f°F",
+                        weatherData.getTemperatureCelsius(),
+                        weatherData.getTemperatureFahrenheit()
+                );
+
+        binding.textDetailTemperature.setText(temperature);
+
+        binding.textDetailCondition.setText(
+                weatherData.getCondition()
         );
 
-        binding.textDetailWind.setText(
-                getString(R.string.detail_wind_format, wind)
-        );
+        /*
+         * WeatherAPI calls this feelslike.
+         * Display both units just like the main temperature.
+         */
+        String feelsLike =
+                String.format(
+                        "Feels like %.1f°C / %.1f°F",
+                        weatherData.getFeelsLikeCelsius(),
+                        weatherData.getFeelsLikeFahrenheit()
+                );
+
+        binding.textDetailFeelsLike.setText(feelsLike);
+
+        String wind =
+                String.format(
+                        "Wind: %.1f km/h",
+                        weatherData.getWindKph()
+                );
+
+        binding.textDetailWind.setText(wind);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
 
-        // Clears the view reference when the fragment layout is destroyed
+        /*
+         * Required ViewBinding cleanup.
+         * The Fragment must not retain its destroyed View.
+         */
         binding = null;
     }
 }

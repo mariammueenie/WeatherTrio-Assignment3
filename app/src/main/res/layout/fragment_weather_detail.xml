@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    Weather detail screen for the selected city.
+
+    The screen can display three states:
+    1. Loading
+    2. Live weather data
+    3. Error with Retry button
+-->
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -8,8 +17,8 @@
     android:orientation="vertical">
 
     <!--
-        Displays the detail-screen title and a back arrow.
-        The back arrow will return the user to the Search screen.
+        Displays the selected city in the toolbar.
+        The back arrow returns to the Search screen.
     -->
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbarWeatherDetail"
@@ -21,120 +30,182 @@
         app:titleTextColor="@color/text_primary" />
 
     <!--
-        Allows the weather details to scroll on smaller screens.
+        Holds the loading, success, and error states
+        in the same main content area.
     -->
-    <ScrollView
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:fillViewport="true">
+        android:layout_weight="1">
 
+        <!--
+            Successful weather content.
+            ScrollView allows the details to fit smaller screens.
+        -->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
+
+            <!--
+                Contains all weather information shown after
+                WeatherAPI returns a successful response.
+            -->
+            <LinearLayout
+                android:id="@+id/layoutWeatherContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:paddingStart="24dp"
+                android:paddingTop="32dp"
+                android:paddingEnd="24dp"
+                android:paddingBottom="32dp">
+
+                <!--
+                    Weather condition icon.
+                    A consistent local icon is used as the visual placeholder.
+                -->
+                <ImageView
+                    android:id="@+id/imageWeatherCondition"
+                    android:layout_width="96dp"
+                    android:layout_height="96dp"
+                    android:contentDescription="@string/weather_icon_description"
+                    android:src="@drawable/ic_weather_condition" />
+
+                <!-- Displays the city returned by WeatherAPI -->
+                <TextView
+                    android:id="@+id/textDetailCity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/detail_city_placeholder"
+                    android:textAppearance="@style/TextAppearance.WeatherTrio.Headline" />
+
+                <!-- Displays the region and country -->
+                <TextView
+                    android:id="@+id/textDetailRegion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="@string/detail_region_placeholder"
+                    android:textAppearance="@style/TextAppearance.WeatherTrio.Body" />
+
+                <!--
+                    Displays the live Celsius and Fahrenheit values.
+                    Temperature remains the main visual focus.
+                -->
+                <TextView
+                    android:id="@+id/textDetailTemperature"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="28dp"
+                    android:text="@string/detail_temperature_placeholder"
+                    android:textAppearance="@style/TextAppearance.WeatherTrio.Headline"
+                    android:textSize="42sp" />
+
+                <!-- Displays the live WeatherAPI condition -->
+                <TextView
+                    android:id="@+id/textDetailCondition"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/detail_condition_placeholder"
+                    android:textAppearance="@style/TextAppearance.WeatherTrio.Body"
+                    android:textColor="@color/secondary"
+                    android:textSize="19sp" />
+
+                <!-- Groups the remaining live weather measurements -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="28dp"
+                    app:cardBackgroundColor="@color/surface"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="3dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="20dp">
+
+                        <!-- Displays live feels-like temperature -->
+                        <TextView
+                            android:id="@+id/textDetailFeelsLike"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/detail_feels_like_placeholder"
+                            android:textAppearance="@style/TextAppearance.WeatherTrio.Body"
+                            android:textSize="17sp" />
+
+                        <!-- Displays live wind speed in kilometres per hour -->
+                        <TextView
+                            android:id="@+id/textDetailWind"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="14dp"
+                            android:text="@string/detail_wind_placeholder"
+                            android:textAppearance="@style/TextAppearance.WeatherTrio.Body"
+                            android:textSize="17sp" />
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+            </LinearLayout>
+
+        </ScrollView>
+
+        <!--
+            Displayed while WeatherViewModel is waiting
+            for WeatherRepository to finish the API request.
+        -->
+        <ProgressBar
+            android:id="@+id/progressWeather"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+
+        <!--
+            Displayed if WeatherAPI cannot be reached
+            or the response cannot be processed.
+        -->
         <LinearLayout
+            android:id="@+id/layoutWeatherError"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
+            android:layout_gravity="center"
+            android:gravity="center"
             android:orientation="vertical"
             android:padding="24dp">
 
-            <!--
-                Required weather icon loaded from res/drawable.
-            -->
-            <ImageView
-                android:id="@+id/imageWeatherCondition"
-                android:layout_width="96dp"
-                android:layout_height="96dp"
-                android:contentDescription="@string/weather_icon_description"
-                android:src="@drawable/ic_weather_condition" />
-
-            <!-- Displays the selected city name -->
             <TextView
-                android:id="@+id/textDetailCity"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/detail_city_placeholder"
-                android:textAppearance="@style/TextAppearance.WeatherTrio.Headline" />
-
-            <!-- Displays the selected city region -->
-            <TextView
-                android:id="@+id/textDetailRegion"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:text="@string/detail_region_placeholder"
-                android:textAppearance="@style/TextAppearance.WeatherTrio.Body" />
-
-            <!-- Displays both Celsius and Fahrenheit values -->
-            <TextView
-                android:id="@+id/textDetailTemperature"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="28dp"
-                android:text="@string/detail_temperature_placeholder"
-                android:textAppearance="@style/TextAppearance.WeatherTrio.Headline"
-                android:textSize="42sp" />
-
-            <!-- Displays the hardcoded weather condition -->
-            <TextView
-                android:id="@+id/textDetailCondition"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="@string/detail_condition_placeholder"
-                android:textAppearance="@style/TextAppearance.WeatherTrio.Body"
-                android:textColor="@color/secondary"
-                android:textSize="19sp" />
-
-            <!-- Groups the remaining weather measurements -->
-            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/textWeatherError"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="28dp"
-                app:cardBackgroundColor="@color/surface"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="3dp">
+                android:gravity="center"
+                android:text="@string/weather_error"
+                android:textAppearance="@style/TextAppearance.WeatherTrio.Body"
+                android:textColor="@color/text_primary"
+                android:textSize="16sp"
+                android:visibility="gone" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="20dp">
-
-                    <!-- Displays the feels-like temperature -->
-                    <TextView
-                        android:id="@+id/textDetailFeelsLike"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/detail_feels_like_placeholder"
-                        android:textAppearance="@style/TextAppearance.WeatherTrio.Body"
-                        android:textSize="17sp" />
-
-                    <!-- Displays humidity as a percentage -->
-                    <TextView
-                        android:id="@+id/textDetailHumidity"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="14dp"
-                        android:text="@string/detail_humidity_placeholder"
-                        android:textAppearance="@style/TextAppearance.WeatherTrio.Body"
-                        android:textSize="17sp" />
-
-                    <!-- Displays wind speed in kilometres per hour -->
-                    <TextView
-                        android:id="@+id/textDetailWind"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="14dp"
-                        android:text="@string/detail_wind_placeholder"
-                        android:textAppearance="@style/TextAppearance.WeatherTrio.Body"
-                        android:textSize="17sp" />
-
-                </LinearLayout>
-
-            </com.google.android.material.card.MaterialCardView>
+            <!--
+                Lets the user ask the ViewModel to retry
+                the same city's weather request.
+            -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonRetryWeather"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="@string/retry"
+                android:visibility="gone" />
 
         </LinearLayout>
 
-    </ScrollView>
+    </FrameLayout>
 
 </LinearLayout>
