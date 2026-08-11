@@ -69,33 +69,55 @@ public class WeatherLocationAdapter
         holder.bind(location);
     }
 
-    @Override
-    public int getItemCount() {
-        return locations.size();
+   @Override
+public int getItemCount() {
+    return locations.size();
+}
+
+/**
+ * Replaces the current RecyclerView data with
+ * the newest city-search results.
+ */
+public void updateLocations(List<WeatherLocation> newLocations) {
+
+    // Remove the previous cities from the adapter's list.
+    locations.clear();
+
+    // Add the newest results returned by Open-Meteo.
+    locations.addAll(newLocations);
+
+    // Tell RecyclerView to redraw the list with the new data.
+    notifyDataSetChanged();
+}
+
+/**
+ * Holds the views for one RecyclerView row.
+ */
+class LocationViewHolder extends RecyclerView.ViewHolder {
+
+    private final ItemWeatherLocationBinding binding;
+
+    LocationViewHolder(ItemWeatherLocationBinding binding) {
+        super(binding.getRoot());
+        this.binding = binding;
     }
 
-    /**
-     * Holds the views for one RecyclerView row.
-     */
-    class LocationViewHolder extends RecyclerView.ViewHolder {
+    void bind(WeatherLocation location) {
 
-        private final ItemWeatherLocationBinding binding;
+        // Displays the city name from the location model.
+        binding.textCityName.setText(location.getCityName());
 
-        LocationViewHolder(ItemWeatherLocationBinding binding) {
-            super(binding.getRoot());
-            this.binding = binding;
-        }
+        // Assignment 3 requires both the region and country
+        // to be shown for each dynamic search result.
+        binding.textRegion.setText(
+                location.getRegion() + ", " + location.getCountry()
+        );
 
-        void bind(WeatherLocation location) {
-
-            // Displays model data rather than hardcoded XML strings.
-            binding.textCityName.setText(location.getCityName());
-            binding.textRegion.setText(location.getRegion());
-
-            // Sends the selected WeatherLocation back to SearchFragment.
-            binding.getRoot().setOnClickListener(view ->
-                    clickListener.onLocationClick(location)
-            );
-        }
+        // Sends the selected WeatherLocation back to SearchFragment
+        // when the user taps this RecyclerView item.
+        binding.getRoot().setOnClickListener(view ->
+                clickListener.onLocationClick(location)
+        );
     }
+}
 }

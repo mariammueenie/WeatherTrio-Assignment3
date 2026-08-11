@@ -17,7 +17,7 @@
 
         <!-- SplashActivity opens first when the app launches -->
         <activity
-            android:name="view.SplashActivity"
+            android:name=".view.SplashActivity"
             android:exported="true"
             android:noHistory="true"
             android:theme="@style/Theme.WeatherTrio.Splash">

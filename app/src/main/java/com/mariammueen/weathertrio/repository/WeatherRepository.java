@@ -5,11 +5,15 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.mariammueen.weathertrio.model.WeatherData;
+import com.mariammueen.weathertrio.model.WeatherLocation;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -37,7 +41,7 @@ public class WeatherRepository {
      * Do not commit your real API key to GitHub.
      */
     private static final String API_KEY =
-            "PASTE_YOUR_WEATHER_API_KEY_HERE";
+        "PASTE_YOUR_WEATHER_API_KEY_HERE";
 
     /*
      * Assignment 2 requires one OkHttpClient instance in the Repository
@@ -67,6 +71,20 @@ public class WeatherRepository {
     /**
      * Requests current weather information for the selected city.
      */
+
+    /**
+         * Callback used for the Assignment 3 city search.
+         *
+         * The Repository returns either a list of matching cities
+         * or a friendly error message.
+         */
+        public interface LocationSearchCallback {
+
+        void onSuccess(List<WeatherLocation> locations);
+
+        void onError(String errorMessage);
+        }
+
     public void getCurrentWeather(
             String cityName,
             WeatherCallback callback
@@ -218,6 +236,191 @@ public class WeatherRepository {
             }
         });
     }
+
+/**
+ * Searches for cities using the Open-Meteo Geocoding API.
+ *
+ * Assignment 3 requires dynamic city results rather than
+ * the hardcoded locations used in Assignment 2.
+ */
+        public void searchLocations(
+                        String searchText,
+                        LocationSearchCallback callback
+                ) {
+
+                Log.d(TAG, "Searching for locations matching " + searchText);
+
+                /*
+                * Build the Open-Meteo geocoding URL.
+                *
+                * No API key is required for this endpoint.
+                */
+                HttpUrl url = new HttpUrl.Builder()
+                        .scheme("https")
+                        .host("geocoding-api.open-meteo.com")
+                        .addPathSegment("v1")
+                        .addPathSegment("search")
+                        .addQueryParameter("name", searchText)
+                        .addQueryParameter("count", "10")
+                        .addQueryParameter("language", "en")
+                        .addQueryParameter("format", "json")
+                        .build();
+
+                Request request = new Request.Builder()
+                        .url(url)
+                        .get()
+                        .build();
+
+                /*
+                * Store the Call so it can be cancelled if the
+                * ViewModel is cleared.
+                */
+                currentCall = client.newCall(request);
+
+                /*
+                * enqueue() performs the request asynchronously so
+                * the Android UI thread is not blocked.
+                */
+                currentCall.enqueue(new Callback() {
+
+                        @Override
+                        public void onFailure(
+                                @NonNull Call call,
+                                @NonNull IOException exception
+                        ) {
+
+                        if (call.isCanceled()) {
+                                Log.d(TAG, "Location search was cancelled");
+                                return;
+                        }
+
+                        Log.e(
+                                TAG,
+                                "Location search failed",
+                                exception
+                        );
+
+                        callback.onError(
+                                "Unable to search for cities. Please check your connection and try again."
+                        );
+                        }
+
+                        @Override
+                        public void onResponse(
+                                @NonNull Call call,
+                                @NonNull Response response
+                        ) {
+
+                        try (Response responseToClose = response) {
+
+                                if (!responseToClose.isSuccessful()) {
+
+                                Log.w(
+                                        TAG,
+                                        "Open-Meteo returned HTTP "
+                                                + responseToClose.code()
+                                );
+
+                                callback.onError(
+                                        "City search could not be completed."
+                                );
+
+                                return;
+                                }
+
+                                if (responseToClose.body() == null) {
+
+                                callback.onError(
+                                        "City search returned no data."
+                                );
+
+                                return;
+                                }
+
+                                String responseBody =
+                                        responseToClose.body().string();
+
+                                List<WeatherLocation> locations =
+                                        parseLocationSearchResponse(responseBody);
+
+                                callback.onSuccess(locations);
+
+                        } catch (IOException | JSONException exception) {
+
+                                Log.e(
+                                        TAG,
+                                        "Unable to process location search response",
+                                        exception
+                                );
+
+                                callback.onError(
+                                        "City search results could not be processed."
+                                );
+                        }
+                        }
+                });
+                }
+
+/**
+ * Converts the Open-Meteo geocoding JSON response
+ * into WeatherLocation model objects.
+ */
+private List<WeatherLocation> parseLocationSearchResponse(
+        String responseBody
+) throws JSONException {
+
+    List<WeatherLocation> locations =
+            new ArrayList<>();
+
+    JSONObject root =
+            new JSONObject(responseBody);
+
+    /*
+     * Open-Meteo may return no "results" array when
+     * no matching city is found.
+     */
+    JSONArray results =
+            root.optJSONArray("results");
+
+    if (results == null) {
+        return locations;
+    }
+
+    for (int index = 0; index < results.length(); index++) {
+
+        JSONObject result =
+                results.getJSONObject(index);
+
+        String cityName =
+                result.optString("name", "");
+
+        String region =
+                result.optString("admin1", "");
+
+        String country =
+                result.optString("country", "");
+
+        double latitude =
+                result.optDouble("latitude", 0.0);
+
+        double longitude =
+                result.optDouble("longitude", 0.0);
+
+        WeatherLocation location =
+                new WeatherLocation(
+                        cityName,
+                        region,
+                        country,
+                        latitude,
+                        longitude
+                );
+
+        locations.add(location);
+    }
+
+    return locations;
+}
+
 
     /**
      * Manually parses the JSON returned from WeatherAPI.

@@ -39,6 +39,35 @@
         android:textColorHint="@color/text_secondary" />
 
     <!--
+    Assignment 3 requires a loading indicator while
+    dynamic city-search results are being fetched.
+    -->
+    <ProgressBar
+        android:id="@+id/progressSearch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp"
+        android:visibility="gone" />
+
+    <!--
+        Displays a friendly message when a search returns
+        no matching cities or when a search error occurs.
+    -->
+    <TextView
+        android:id="@+id/textSearchMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="20dp"
+        android:gravity="center"
+        android:textColor="@color/text_secondary"
+        android:textSize="15sp"
+        android:visibility="gone" />
+
+
+    <!--
         Assignment 2 requires the locations to be displayed
         using RecyclerView rather than hardcoded cards.
     -->
@@ -47,7 +76,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="12dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="20dp"
         android:layout_weight="1"
