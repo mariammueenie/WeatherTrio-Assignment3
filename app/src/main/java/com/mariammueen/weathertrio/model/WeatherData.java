@@ -1,7 +1,7 @@
 package com.mariammueen.weathertrio.model;
 
 /**
- * Represents the current weather information returned by WeatherAPI.
+ * Represents the current weather information returned by OpenMateo.
  *
  * The Repository will create this object after manually parsing
  * the JSON response. The ViewModel will then expose it to the

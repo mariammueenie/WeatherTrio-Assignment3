@@ -487,7 +487,6 @@ private WeatherData parseOpenMeteoWeatherResponse(
 
     /*
      * Keep the same region/country display format
-     * previously supplied by WeatherAPI.
      */
     String fullRegion;
 
