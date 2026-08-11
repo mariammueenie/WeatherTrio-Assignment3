@@ -14,6 +14,8 @@ import androidx.lifecycle.ViewModelProvider;
 import com.mariammueen.weathertrio.databinding.FragmentWeatherDetailBinding;
 import com.mariammueen.weathertrio.model.SavedLocation;
 import com.mariammueen.weathertrio.model.WeatherData;
+import com.mariammueen.weathertrio.preferences.SettingsPreferences;
+import com.mariammueen.weathertrio.util.TemperatureFormatter;
 import com.mariammueen.weathertrio.viewmodel.SavedViewModel;
 import com.mariammueen.weathertrio.viewmodel.WeatherViewModel;
 
@@ -33,6 +35,7 @@ public class WeatherDetailFragment extends Fragment {
     public static final String ARG_LATITUDE = "latitude";
     public static final String ARG_LONGITUDE = "longitude";
 
+    // ViewBinding gives access to fragment_weather_detail.xml.
     private FragmentWeatherDetailBinding binding;
 
     // Handles live weather information.
@@ -40,6 +43,12 @@ public class WeatherDetailFragment extends Fragment {
 
     // Handles the saved-location Firestore state.
     private SavedViewModel savedViewModel;
+
+    // Reads the temperature unit selected in Settings.
+    private SettingsPreferences settingsPreferences;
+
+    // Kotlin helper used to format Celsius or Fahrenheit.
+    private TemperatureFormatter temperatureFormatter;
 
     /*
      * Complete location information passed from Search
@@ -60,6 +69,7 @@ public class WeatherDetailFragment extends Fragment {
             @Nullable Bundle savedInstanceState
     ) {
 
+        // Create the Detail screen using ViewBinding.
         binding = FragmentWeatherDetailBinding.inflate(
                 inflater,
                 container,
@@ -80,6 +90,20 @@ public class WeatherDetailFragment extends Fragment {
         savedViewModel = new ViewModelProvider(this)
                 .get(SavedViewModel.class);
 
+        /*
+         * Read the local Settings preference so the Detail
+         * screen knows which temperature unit to display.
+         */
+        settingsPreferences =
+                new SettingsPreferences(requireContext());
+
+        /*
+         * TemperatureFormatter is written in Kotlin.
+         * Java can use the Kotlin class normally.
+         */
+        temperatureFormatter =
+                new TemperatureFormatter();
+
         readLocationArguments();
         setupToolbar();
         setupSaveLocationButton();
@@ -96,7 +120,8 @@ public class WeatherDetailFragment extends Fragment {
         );
 
         /*
-         * Keep the existing weather-loading behaviour.
+         * Load current weather using the exact coordinates
+         * passed from Search or Saved.
          */
         viewModel.loadWeather(
                 selectedCity,
@@ -139,17 +164,21 @@ public class WeatherDetailFragment extends Fragment {
          * Display the location immediately while
          * the weather request is loading.
          */
-        binding.textDetailCity.setText(selectedCity);
+        binding.textDetailCity.setText(
+                selectedCity
+        );
 
         /*
-         * Include the country when it is available.
+         * Include both region and country when available.
          */
         if (!selectedCountry.isEmpty()) {
 
             if (!selectedRegion.isEmpty()) {
 
                 binding.textDetailRegion.setText(
-                        selectedRegion + ", " + selectedCountry
+                        selectedRegion
+                                + ", "
+                                + selectedCountry
                 );
 
             } else {
@@ -176,9 +205,12 @@ public class WeatherDetailFragment extends Fragment {
                 selectedCity
         );
 
-        binding.toolbarWeatherDetail.setNavigationOnClickListener(
-                view -> getParentFragmentManager().popBackStack()
-        );
+        binding.toolbarWeatherDetail
+                .setNavigationOnClickListener(
+                        view ->
+                                getParentFragmentManager()
+                                        .popBackStack()
+                );
     }
 
     /**
@@ -219,8 +251,6 @@ public class WeatherDetailFragment extends Fragment {
 
     /**
      * Observes all LiveData exposed by WeatherViewModel.
-     *
-     * This is the existing weather-display behaviour.
      */
     private void observeWeatherViewModel() {
 
@@ -274,7 +304,8 @@ public class WeatherDetailFragment extends Fragment {
                 getViewLifecycleOwner(),
                 message -> {
 
-                    if (message != null && !message.isEmpty()) {
+                    if (message != null
+                            && !message.isEmpty()) {
 
                         binding.layoutWeatherContent.setVisibility(
                                 View.GONE
@@ -296,9 +327,9 @@ public class WeatherDetailFragment extends Fragment {
         );
 
         /*
-        * Retry uses the same exact coordinates that were
-        * originally passed to this Detail screen.
-        */
+         * Retry uses the same exact coordinates that were
+         * originally passed to this Detail screen.
+         */
         binding.buttonRetryWeather.setOnClickListener(
                 view -> viewModel.loadWeather(
                         selectedCity,
@@ -357,7 +388,8 @@ public class WeatherDetailFragment extends Fragment {
                 getViewLifecycleOwner(),
                 message -> {
 
-                    if (message != null && !message.isEmpty()) {
+                    if (message != null
+                            && !message.isEmpty()) {
 
                         Toast.makeText(
                                 requireContext(),
@@ -376,7 +408,8 @@ public class WeatherDetailFragment extends Fragment {
                 getViewLifecycleOwner(),
                 message -> {
 
-                    if (message != null && !message.isEmpty()) {
+                    if (message != null
+                            && !message.isEmpty()) {
 
                         Toast.makeText(
                                 requireContext(),
@@ -428,15 +461,21 @@ public class WeatherDetailFragment extends Fragment {
         );
 
         /*
-         * Display both Celsius and Fahrenheit.
-         *
-         * \u00B0 is the Unicode degree symbol.
+         * Read the temperature unit selected
+         * by the user in Settings.
+         */
+        String selectedUnit =
+                settingsPreferences.getTemperatureUnit();
+
+        /*
+         * TemperatureFormatter chooses the Celsius
+         * or Fahrenheit value based on selectedUnit.
          */
         String temperature =
-                String.format(
-                        "%.1f\u00B0C  /  %.1f\u00B0F",
+                temperatureFormatter.formatTemperature(
                         weatherData.getTemperatureCelsius(),
-                        weatherData.getTemperatureFahrenheit()
+                        weatherData.getTemperatureFahrenheit(),
+                        selectedUnit
                 );
 
         binding.textDetailTemperature.setText(
@@ -448,13 +487,14 @@ public class WeatherDetailFragment extends Fragment {
         );
 
         /*
-         * Display feels-like temperature in both units.
+         * Use the same saved unit for
+         * the feels-like temperature.
          */
         String feelsLike =
-                String.format(
-                        "Feels like %.1f\u00B0C / %.1f\u00B0F",
+                temperatureFormatter.formatFeelsLike(
                         weatherData.getFeelsLikeCelsius(),
-                        weatherData.getFeelsLikeFahrenheit()
+                        weatherData.getFeelsLikeFahrenheit(),
+                        selectedUnit
                 );
 
         binding.textDetailFeelsLike.setText(
@@ -462,7 +502,7 @@ public class WeatherDetailFragment extends Fragment {
         );
 
         /*
-         * Display wind speed in kilometres per hour.
+         * Wind speed remains kilometres per hour.
          */
         String wind =
                 String.format(
@@ -477,6 +517,7 @@ public class WeatherDetailFragment extends Fragment {
 
     @Override
     public void onDestroyView() {
+
         super.onDestroyView();
 
         /*

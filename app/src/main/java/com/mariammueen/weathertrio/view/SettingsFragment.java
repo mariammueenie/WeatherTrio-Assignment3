@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -17,6 +18,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.mariammueen.weathertrio.BuildConfig;
 import com.mariammueen.weathertrio.R;
 import com.mariammueen.weathertrio.databinding.FragmentSettingsBinding;
+import com.mariammueen.weathertrio.preferences.SettingsPreferences;
 
 /**
  * Displays WeatherTrio settings and account information.
@@ -29,6 +31,9 @@ public class SettingsFragment extends Fragment {
     // FirebaseAuth gives access to the signed-in user
     // and handles signing the user out.
     private FirebaseAuth auth;
+
+    // Stores the user's temperature and theme preferences.
+    private SettingsPreferences settingsPreferences;
 
     @Nullable
     @Override
@@ -48,8 +53,16 @@ public class SettingsFragment extends Fragment {
         // Gets the Firebase Authentication instance.
         auth = FirebaseAuth.getInstance();
 
+        // Opens the SharedPreferences-backed settings helper.
+        settingsPreferences =
+                new SettingsPreferences(requireContext());
+
         // Show the email address of the currently signed-in user.
         displaySignedInUser();
+
+        // Load and connect both user preferences.
+        setupTemperaturePreference();
+        setupThemePreference();
 
         // Displays app version from BuildConfig.
         binding.textAppVersion.setText(
@@ -83,6 +96,106 @@ public class SettingsFragment extends Fragment {
     }
 
     /**
+     * Loads the saved temperature unit and connects
+     * the Celsius/Fahrenheit RadioGroup.
+     */
+    private void setupTemperaturePreference() {
+
+        String savedUnit =
+                settingsPreferences.getTemperatureUnit();
+
+        /*
+         * Select the radio button that matches the value
+         * already stored in SharedPreferences.
+         */
+        if (SettingsPreferences.UNIT_FAHRENHEIT.equals(
+                savedUnit
+        )) {
+
+            binding.radioFahrenheit.setChecked(true);
+
+        } else {
+
+            // Celsius is the default unit.
+            binding.radioCelsius.setChecked(true);
+        }
+
+        /*
+         * Save the new preference whenever the user
+         * chooses a different temperature unit.
+         */
+        binding.radioGroupTemperature.setOnCheckedChangeListener(
+                (group, checkedId) -> {
+
+                    if (checkedId == R.id.radioFahrenheit) {
+
+                        settingsPreferences.setTemperatureUnit(
+                                SettingsPreferences.UNIT_FAHRENHEIT
+                        );
+
+                    } else if (checkedId == R.id.radioCelsius) {
+
+                        settingsPreferences.setTemperatureUnit(
+                                SettingsPreferences.UNIT_CELSIUS
+                        );
+                    }
+                }
+        );
+    }
+
+    /**
+     * Loads the saved theme preference and connects
+     * the Dark Mode switch.
+     */
+    private void setupThemePreference() {
+
+        /*
+         * Set the switch state before adding the listener.
+         * This prevents simply opening Settings from
+         * accidentally saving or changing the theme.
+         */
+        binding.switchDarkMode.setChecked(
+                settingsPreferences.isDarkModeEnabled()
+        );
+
+        binding.switchDarkMode.setOnCheckedChangeListener(
+                (buttonView, isChecked) -> {
+
+                    // Save the user's choice.
+                    settingsPreferences.setDarkModeEnabled(
+                            isChecked
+                    );
+
+                    int selectedNightMode;
+
+                    if (isChecked) {
+
+                        selectedNightMode =
+                                AppCompatDelegate.MODE_NIGHT_YES;
+
+                    } else {
+
+                        selectedNightMode =
+                                AppCompatDelegate.MODE_NIGHT_NO;
+                    }
+
+                    /*
+                     * Changing the default night mode recreates
+                     * the Activity so Android can reload the correct
+                     * values/ or values-night/ resources.
+                     */
+                    if (AppCompatDelegate.getDefaultNightMode()
+                            != selectedNightMode) {
+
+                        AppCompatDelegate.setDefaultNightMode(
+                                selectedNightMode
+                        );
+                    }
+                }
+        );
+    }
+
+    /**
      * Displays the current Firebase user's email
      * on the Settings screen.
      */
@@ -99,10 +212,8 @@ public class SettingsFragment extends Fragment {
 
         } else {
 
-            // This should normally only happen if there is
-            // no valid Firebase Authentication session.
             binding.textSignedInEmail.setText(
-                    "No signed-in user"
+                    R.string.settings_no_signed_in_user
             );
         }
     }
@@ -161,7 +272,6 @@ public class SettingsFragment extends Fragment {
 
         } else {
 
-            // Show a message instead of allowing the app to crash.
             Toast.makeText(
                     requireContext(),
                     R.string.error_no_email_app,
@@ -246,6 +356,7 @@ public class SettingsFragment extends Fragment {
 
     @Override
     public void onDestroyView() {
+
         super.onDestroyView();
 
         // Clear the old view reference when this Fragment is destroyed.

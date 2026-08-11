@@ -26,6 +26,7 @@
         android:layout_height="wrap_content"
         android:background="@color/surface"
         app:navigationIcon="@drawable/ic_back"
+        app:navigationIconTint="@color/text_primary"
         app:title="@string/weather_detail_title"
         app:titleTextColor="@color/text_primary" />
 
@@ -99,6 +100,7 @@
                 -->
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/buttonSaveLocation"
+                    android:textColor="@color/text_primary"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="18dp"

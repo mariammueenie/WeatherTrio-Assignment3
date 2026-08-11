@@ -9,8 +9,8 @@
     android:orientation="vertical">
 
     <!--
-        Displays the Settings screen title.
-        This keeps the screen consistent with Search and Saved.
+        Settings screen toolbar.
+        This matches the toolbar used on the other main screens.
     -->
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbarSettings"
@@ -20,92 +20,164 @@
         app:title="@string/settings_title"
         app:titleTextColor="@color/text_primary" />
 
-    <!-- Holds all Settings content below the toolbar. -->
-    <LinearLayout
+    <!--
+        The Settings screen now contains more controls,
+        so a ScrollView prevents content from being cut off
+        on smaller screens.
+    -->
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:orientation="vertical"
-        android:padding="24dp">
+        android:fillViewport="true">
 
-        <!--
-            Shows which Firebase user is currently signed in.
-        -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Signed in as"
-            android:textAppearance="@style/TextAppearance.WeatherTrio.Body"
-            android:textStyle="bold" />
-
-        <!--
-            SettingsFragment will place the authenticated
-            Firebase user's email address here.
-        -->
-        <TextView
-            android:id="@+id/textSignedInEmail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="user@example.com"
-            android:textAppearance="@style/TextAppearance.WeatherTrio.Body" />
-
-        <!--
-            Shows the app version.
-            The real version is inserted from BuildConfig in Java.
-        -->
-        <TextView
-            android:id="@+id/textAppVersion"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="@string/settings_version_placeholder"
-            android:textAppearance="@style/TextAppearance.WeatherTrio.Body" />
-
-        <!-- Opens the user's email app with feedback information pre-filled. -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/buttonSendFeedback"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="@string/settings_send_feedback"
-            app:icon="@drawable/ic_feedback"
-            app:iconGravity="textStart"
-            app:iconPadding="12dp" />
+            android:orientation="vertical"
+            android:padding="24dp">
 
-        <!-- Opens the project website or GitHub page. -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/buttonViewWebsite"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:text="@string/settings_view_website"
-            app:icon="@drawable/ic_website"
-            app:iconGravity="textStart"
-            app:iconPadding="12dp" />
+            <!-- ACCOUNT -->
 
-        <!-- Opens the Android share sheet. -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/buttonShareApp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:text="@string/settings_share_app"
-            app:icon="@drawable/ic_share"
-            app:iconGravity="textStart"
-            app:iconPadding="12dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_signed_in_as"
+                android:textAppearance="@style/TextAppearance.WeatherTrio.Body"
+                android:textStyle="bold" />
 
-        <!--
-            Signs the current Firebase user out.
-            The Java code will connect this button in the next step.
-        -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/buttonSignOut"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="Sign Out" />
+            <!--
+                SettingsFragment places the current
+                Firebase user's email address here.
+            -->
+            <TextView
+                android:id="@+id/textSignedInEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/settings_no_signed_in_user"
+                android:textAppearance="@style/TextAppearance.WeatherTrio.Body" />
 
-    </LinearLayout>
+            <!-- TEMPERATURE UNIT -->
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="28dp"
+                android:text="@string/settings_temperature_unit"
+                android:textAppearance="@style/TextAppearance.WeatherTrio.Body"
+                android:textStyle="bold" />
+
+            <!--
+                Only one temperature unit can be selected at a time.
+                The saved SharedPreferences value will determine
+                which RadioButton is checked when Settings opens.
+            -->
+            <RadioGroup
+                android:id="@+id/radioGroupTemperature"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="vertical">
+
+                <RadioButton
+                    android:id="@+id/radioCelsius"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/settings_celsius"
+                    android:textColor="@color/text_primary" />
+
+                <RadioButton
+                    android:id="@+id/radioFahrenheit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/settings_fahrenheit"
+                    android:textColor="@color/text_primary" />
+
+            </RadioGroup>
+
+            <!-- THEME -->
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="@string/settings_theme"
+                android:textAppearance="@style/TextAppearance.WeatherTrio.Body"
+                android:textStyle="bold" />
+
+            <!--
+                Checked = Dark Mode
+                Unchecked = Light Mode
+
+                Settings logic will save this choice and apply it
+                using AppCompatDelegate.setDefaultNightMode().
+            -->
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/switchDarkMode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/settings_dark_mode"
+                android:textColor="@color/text_primary" />
+
+            <!-- APP INFORMATION -->
+
+            <TextView
+                android:id="@+id/textAppVersion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="28dp"
+                android:text="@string/settings_version_placeholder"
+                android:textAppearance="@style/TextAppearance.WeatherTrio.Body" />
+
+            <!-- Opens the user's email app with feedback information pre-filled. -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonSendFeedback"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="@string/settings_send_feedback"
+                app:icon="@drawable/ic_feedback"
+                app:iconGravity="textStart"
+                app:iconPadding="12dp" />
+
+            <!-- Opens the project website or GitHub page. -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonViewWebsite"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="@string/settings_view_website"
+                app:icon="@drawable/ic_website"
+                app:iconGravity="textStart"
+                app:iconPadding="12dp" />
+
+            <!-- Opens the Android share sheet. -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonShareApp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="@string/settings_share_app"
+                app:icon="@drawable/ic_share"
+                app:iconGravity="textStart"
+                app:iconPadding="12dp" />
+
+            <!--
+                Signs the current Firebase user out
+                and returns to LoginActivity.
+            -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonSignOut"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="24dp"
+                android:text="@string/settings_sign_out" />
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </LinearLayout>

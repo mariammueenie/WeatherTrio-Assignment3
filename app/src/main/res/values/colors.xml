@@ -1,12 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Basic colours -->
+
+<!--
+    Light-mode colours.
+
+    These use the same semantic colour names as the dark-mode
+    values in values-night/colors.xml so Android can switch
+    palettes automatically.
+-->
 <resources>
-    <color name="background_main">#08020E</color>
-    <color name="surface">#181020</color>
 
-    <color name="primary">#9A35FF</color>
-    <color name="secondary">#00D4FF</color>
+    <color name="background_main">#F8F4FC</color>
+    <color name="surface">#FFFFFF</color>
 
-    <color name="text_primary">#F8F1FF</color>
-    <color name="text_secondary">#C4B4D2</color>
+    <color name="primary">#7B2CBF</color>
+    <color name="secondary">#007C91</color>
+
+    <color name="text_primary">#211527</color>
+    <color name="text_secondary">#64586B</color>
+
+    <!-- Text/icons displayed on top of accent colours. -->
+    <color name="on_primary">#FFFFFF</color>
+    <color name="on_secondary">#FFFFFF</color>
+
 </resources>

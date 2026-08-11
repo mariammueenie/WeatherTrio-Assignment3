@@ -70,11 +70,27 @@
 
 <!-- Settings -->
     <string name="settings_title">Settings</string>
+
+    <!-- Account information -->
+    <string name="settings_signed_in_as">Signed in as</string>
+    <string name="settings_no_signed_in_user">No signed-in user</string>
+
+    <!-- Temperature preference -->
+    <string name="settings_temperature_unit">Temperature Unit</string>
+    <string name="settings_celsius">Celsius (°C)</string>
+    <string name="settings_fahrenheit">Fahrenheit (°F)</string>
+
+    <!-- Theme preference -->
+    <string name="settings_theme">Theme</string>
+    <string name="settings_dark_mode">Dark Mode</string>
+
+    <!-- App information and actions -->
     <string name="settings_version_placeholder">Version</string>
     <string name="settings_version_format">Version %1$s</string>
     <string name="settings_send_feedback">Send Feedback</string>
     <string name="settings_view_website">View on GitHub</string>
     <string name="settings_share_app">Share App</string>
+    <string name="settings_sign_out">Sign Out</string>
 
 <!-- Settings intent content -->
     <string name="feedback_subject">WeatherTrio Feedback</string>

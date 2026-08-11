@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    Dark-mode colours.
+
+    These are the original WeatherTrio colours.
+    Keeping the same semantic names as values/colors.xml
+    allows Android to swap palettes automatically.
+-->
+<resources>
+
+    <color name="background_main">#08020E</color>
+    <color name="surface">#181020</color>
+
+    <color name="primary">#9A35FF</color>
+    <color name="secondary">#00D4FF</color>
+
+    <color name="text_primary">#F8F1FF</color>
+    <color name="text_secondary">#C4B4D2</color>
+
+    <!-- Text/icons displayed on top of accent colours. -->
+    <color name="on_primary">#FFFFFF</color>
+    <color name="on_secondary">#08020E</color>
+
+</resources>
