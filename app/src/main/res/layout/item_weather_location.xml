@@ -33,8 +33,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:contentDescription="@string/weather_icon_description"
-            android:src="@drawable/ic_weather_condition"
-            app:tint="@color/secondary" />
+            android:src="@drawable/ic_weather_condition" />
 
         <!--
             Holds the city and region text beside the icon.

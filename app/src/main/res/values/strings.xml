@@ -4,7 +4,7 @@
     <string name="app_name">WeatherTrio</string>
 
 <!-- Splash screen -->
-    <string name="splash_subtitle">Weather for three simple moments.</string>
+    <string name="splash_subtitle">Weather for you, 3 clicks away.</string>
 
 <!-- Bottom navigation labels -->
     <string name="nav_search">Search</string>

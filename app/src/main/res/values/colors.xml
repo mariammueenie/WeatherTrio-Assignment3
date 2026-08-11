@@ -22,4 +22,7 @@
     <color name="on_primary">#FFFFFF</color>
     <color name="on_secondary">#FFFFFF</color>
 
+    <color name="weather_icon_pin">#7C3AED</color>
+<color name="weather_icon_sun">#FFD54F</color>
+
 </resources>
