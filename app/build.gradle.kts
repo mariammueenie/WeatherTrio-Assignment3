@@ -73,4 +73,7 @@ dependencies {
     // Firebase Authentication will provide registration,
     // login, current-user sessions and sign out.
     implementation("com.google.firebase:firebase-auth")
+
+    // Cloud Firestore stores each user's saved weather locations.
+    implementation("com.google.firebase:firebase-firestore")
 }

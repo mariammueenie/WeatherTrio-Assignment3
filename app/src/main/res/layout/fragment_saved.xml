@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -8,8 +9,7 @@
     android:orientation="vertical">
 
     <!--
-        Displays required Saved screen title.
-        Using same toolbar style keeps all main screens consistent.
+        Keeps the existing Saved screen toolbar.
     -->
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbarSaved"
@@ -20,36 +20,61 @@
         app:titleTextColor="@color/text_primary" />
 
     <!--
-        Centres required empty-state content below the toolbar.
-        This screen remains simple because saved cities are added later.
+        Holds either the saved-location list
+        or the existing empty-state message.
     -->
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:padding="24dp">
+        android:layout_weight="1">
 
         <!--
-            Shows an icon so empty state is visually clear.
-            A custom vector icon will replace this temporary drawable later.
+            Displays SavedLocation objects returned from Firestore.
+            It starts hidden until the app receives at least one location.
         -->
-        <ImageView
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:contentDescription="@string/saved_empty_icon_description"
-            android:src="@drawable/ic_saved_empty" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerSavedLocations"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:padding="16dp"
+            android:visibility="gone" />
 
-        <!-- Explains why Saved screen currently has no content -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/saved_empty_message"
-            android:textAppearance="@style/TextAppearance.WeatherTrio.Body"
-            android:textSize="18sp" />
+        <!--
+            Existing empty state.
+            This stays visible while the user has no saved locations.
+        -->
+        <LinearLayout
+            android:id="@+id/layoutSavedEmpty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="24dp">
 
-    </LinearLayout>
+            <!--
+                Existing Saved-screen empty-state icon.
+            -->
+            <ImageView
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:contentDescription="@string/saved_empty_icon_description"
+                android:src="@drawable/ic_saved_empty" />
+
+            <!--
+                Explains that there are currently no saved cities.
+            -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="center"
+                android:text="@string/saved_empty_message"
+                android:textAppearance="@style/TextAppearance.WeatherTrio.Body"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+
+    </FrameLayout>
 
 </LinearLayout>

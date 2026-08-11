@@ -23,11 +23,11 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 /**
- * Repository responsible for retrieving current weather data.
+ * Repository responsible for retrieving weather and city-search data.
  *
  * Keeping the network code here follows the MVVM structure taught in class:
  *
- * View -> ViewModel -> Repository -> WeatherAPI
+ * View -> ViewModel -> Repository -> Open-Meteo
  *
  * Fragments and Activities should not perform network requests directly.
  */
@@ -35,18 +35,11 @@ public class WeatherRepository {
 
     private static final String TAG = "WeatherRepository";
 
-    /*
-     * Replace this placeholder with your real WeatherAPI key when testing.
-     *
-     * Do not commit your real API key to GitHub.
-     */
-    private static final String API_KEY =
-        "PASTE_YOUR_WEATHER_API_KEY_HERE";
 
     /*
-     * Assignment 2 requires one OkHttpClient instance in the Repository
-     * that is reused for all weather requests.
-     */
+        * One OkHttpClient instance is reused for the app's
+        * Open-Meteo network requests.
+ */
     private final OkHttpClient client = new OkHttpClient();
 
     /*
@@ -85,157 +78,185 @@ public class WeatherRepository {
         void onError(String errorMessage);
         }
 
-    public void getCurrentWeather(
-            String cityName,
-            WeatherCallback callback
-    ) {
 
-        Log.d(TAG, "Requesting current weather for " + cityName);
+/**
+ * Requests current weather from Open-Meteo using the exact
+ * latitude and longitude selected from the Search screen.
+ *
+ * Assignment 3 requires Weather Detail to use the coordinates
+ * passed from the selected city instead of searching again by name.
+ */
+public void getCurrentWeatherByCoordinates(
+        String cityName,
+        String region,
+        String country,
+        double latitude,
+        double longitude,
+        WeatherCallback callback
+) {
 
-        /*
-         * Build the WeatherAPI URL manually using HttpUrl.Builder,
-         * as required by Assignment 2.
-         *
-         * Result:
-         * https://api.weatherapi.com/v1/current.json
-         *      ?key=...
-         *      &q=Toronto
-         *      &aqi=no
-         */
-        HttpUrl url = new HttpUrl.Builder()
-                .scheme("https")
-                .host("api.weatherapi.com")
-                .addPathSegment("v1")
-                .addPathSegment("current.json")
-                .addQueryParameter("key", API_KEY)
-                .addQueryParameter("q", cityName)
-                .addQueryParameter("aqi", "no")
-                .build();
+    Log.d(
+            TAG,
+            "Requesting Open-Meteo weather for "
+                    + cityName
+                    + " at "
+                    + latitude
+                    + ", "
+                    + longitude
+    );
 
-        /*
-         * A Request tells OkHttp which URL should be requested.
-         */
-        Request request = new Request.Builder()
-                .url(url)
-                .get()
-                .build();
+    /*
+     * Build the Open-Meteo Forecast API URL.
+     *
+     * We only request the current values needed by
+     * the existing Weather Detail screen.
+     */
+    HttpUrl url = new HttpUrl.Builder()
+            .scheme("https")
+            .host("api.open-meteo.com")
+            .addPathSegment("v1")
+            .addPathSegment("forecast")
+            .addQueryParameter(
+                    "latitude",
+                    Double.toString(latitude)
+            )
+            .addQueryParameter(
+                    "longitude",
+                    Double.toString(longitude)
+            )
+            .addQueryParameter(
+                    "current",
+                    "temperature_2m,apparent_temperature,weather_code,wind_speed_10m"
+            )
+            .build();
 
-        /*
-         * Store the Call so it can be cancelled if the ViewModel
-         * is destroyed before the request finishes.
-         */
-        currentCall = client.newCall(request);
+    Request request = new Request.Builder()
+            .url(url)
+            .get()
+            .build();
 
-        /*
-         * enqueue() runs asynchronously.
-         *
-         * This prevents network work from blocking Android's main/UI thread.
-         */
-        currentCall.enqueue(new Callback() {
+    /*
+     * Keep the current Call so WeatherViewModel
+     * can cancel it if the ViewModel is destroyed.
+     */
+    currentCall = client.newCall(request);
 
-            /**
-             * Called when the request cannot reach the server.
-             *
-             * Examples:
-             * - Wi-Fi is disabled
-             * - no Internet connection
-             * - connection times out
-             */
-            @Override
-            public void onFailure(
-                    @NonNull Call call,
-                    @NonNull IOException exception
-            ) {
+    /*
+     * enqueue() performs the request away from
+     * Android's main UI thread.
+     */
+    currentCall.enqueue(new Callback() {
 
-                if (call.isCanceled()) {
-                    Log.d(TAG, "Weather request was cancelled");
+        @Override
+        public void onFailure(
+                @NonNull Call call,
+                @NonNull IOException exception
+        ) {
+
+            if (call.isCanceled()) {
+
+                Log.d(
+                        TAG,
+                        "Open-Meteo weather request was cancelled"
+                );
+
+                return;
+            }
+
+            Log.e(
+                    TAG,
+                    "Open-Meteo weather request failed for "
+                            + cityName,
+                    exception
+            );
+
+            callback.onError(
+                    "Unable to load weather. Please check your connection and try again."
+            );
+        }
+
+        @Override
+        public void onResponse(
+                @NonNull Call call,
+                @NonNull Response response
+        ) {
+
+            try (Response responseToClose = response) {
+
+                /*
+                 * The server may respond but still return
+                 * an unsuccessful HTTP status.
+                 */
+                if (!responseToClose.isSuccessful()) {
+
+                    Log.w(
+                            TAG,
+                            "Open-Meteo weather returned HTTP "
+                                    + responseToClose.code()
+                    );
+
+                    callback.onError(
+                            "Weather information could not be loaded."
+                    );
+
                     return;
                 }
 
+                if (responseToClose.body() == null) {
+
+                    Log.w(
+                            TAG,
+                            "Open-Meteo weather returned no response body"
+                    );
+
+                    callback.onError(
+                            "Weather information could not be loaded."
+                    );
+
+                    return;
+                }
+
+                String responseBody =
+                        responseToClose.body().string();
+
+                /*
+                 * Keep using the manual JSONObject parsing
+                 * style already used in this project.
+                 */
+                WeatherData result =
+                        parseOpenMeteoWeatherResponse(
+                                responseBody,
+                                cityName,
+                                region,
+                                country
+                        );
+
+                Log.i(
+                        TAG,
+                        "Open-Meteo weather loaded for "
+                                + cityName
+                );
+
+                callback.onSuccess(result);
+
+            } catch (IOException | JSONException exception) {
+
                 Log.e(
                         TAG,
-                        "Weather request failed for " + cityName,
+                        "Unable to process Open-Meteo weather response",
                         exception
                 );
 
                 callback.onError(
-                        "Unable to load weather. Please check your connection and try again."
+                        "Weather information could not be processed."
                 );
             }
+        }
+    });
+}
 
-            /**
-             * Called when WeatherAPI returns an HTTP response.
-             */
-            @Override
-            public void onResponse(
-                    @NonNull Call call,
-                    @NonNull Response response
-            ) {
 
-                try (Response responseToClose = response) {
 
-                    /*
-                     * A response can reach the server but still fail,
-                     * for example because of an invalid API key.
-                     */
-                    if (!responseToClose.isSuccessful()) {
-
-                        Log.w(
-                                TAG,
-                                "WeatherAPI returned HTTP "
-                                        + responseToClose.code()
-                        );
-
-                        callback.onError(
-                                "Weather information could not be loaded."
-                        );
-
-                        return;
-                    }
-
-                    if (responseToClose.body() == null) {
-
-                        Log.w(TAG, "WeatherAPI returned an empty response");
-
-                        callback.onError(
-                                "Weather information could not be loaded."
-                        );
-
-                        return;
-                    }
-
-                    String responseBody =
-                            responseToClose.body().string();
-
-                    /*
-                     * Assignment 2 specifically requires manual
-                     * JSON parsing using org.json.JSONObject.
-                     */
-                    WeatherData weatherData =
-                            parseWeatherResponse(responseBody);
-
-                    Log.i(
-                            TAG,
-                            "Weather data loaded for " + cityName
-                    );
-
-                    callback.onSuccess(weatherData);
-
-                } catch (IOException | JSONException exception) {
-
-                    Log.e(
-                            TAG,
-                            "Unable to process WeatherAPI response",
-                            exception
-                    );
-
-                    callback.onError(
-                            "Weather information could not be processed."
-                    );
-                }
-            }
-        });
-    }
 
 /**
  * Searches for cities using the Open-Meteo Geocoding API.
@@ -422,84 +443,164 @@ private List<WeatherLocation> parseLocationSearchResponse(
 }
 
 
-    /**
-     * Manually parses the JSON returned from WeatherAPI.
-     *
-     * The fields correspond to the values required on the
-     * Assignment 2 weather detail screen.
+/**
+ * Converts the current-weather section returned by Open-Meteo
+ * into the existing WeatherData model.
+ */
+private WeatherData parseOpenMeteoWeatherResponse(
+        String responseBody,
+        String cityName,
+        String region,
+        String country
+) throws JSONException {
+
+    JSONObject root =
+            new JSONObject(responseBody);
+
+    JSONObject current =
+            root.getJSONObject("current");
+
+    /*
+     * Open-Meteo returns Celsius and km/h by default.
      */
-    private WeatherData parseWeatherResponse(String responseBody)
-            throws JSONException {
+    double temperatureCelsius =
+            current.getDouble("temperature_2m");
 
-        JSONObject root =
-                new JSONObject(responseBody);
+    double feelsLikeCelsius =
+            current.getDouble("apparent_temperature");
 
-        JSONObject location =
-                root.getJSONObject("location");
+    double windKph =
+            current.getDouble("wind_speed_10m");
 
-        JSONObject current =
-                root.getJSONObject("current");
+    int weatherCode =
+            current.getInt("weather_code");
 
-        JSONObject condition =
-                current.getJSONObject("condition");
+    /*
+     * WeatherData already stores both Celsius and Fahrenheit,
+     * so calculate Fahrenheit from the Celsius value.
+     */
+    double temperatureFahrenheit =
+            (temperatureCelsius * 9.0 / 5.0) + 32.0;
 
-        String cityName =
-                location.getString("name");
+    double feelsLikeFahrenheit =
+            (feelsLikeCelsius * 9.0 / 5.0) + 32.0;
 
-        String region =
-                location.getString("region");
+    /*
+     * Keep the same region/country display format
+     * previously supplied by WeatherAPI.
+     */
+    String fullRegion;
 
-        String country =
-                location.getString("country");
+    if (region.isEmpty()) {
 
-        /*
-         * WeatherAPI separates region and country.
-         * Combine them for a clearer display.
-         */
-        String fullRegion;
+        fullRegion = country;
 
-        if (region.isEmpty()) {
-            fullRegion = country;
-        } else {
-            fullRegion = region + ", " + country;
-        }
+    } else if (country.isEmpty()) {
 
-        double temperatureCelsius =
-                current.getDouble("temp_c");
+        fullRegion = region;
 
-        double temperatureFahrenheit =
-                current.getDouble("temp_f");
+    } else {
 
-        String conditionText =
-                condition.getString("text");
-
-        double windKph =
-                current.getDouble("wind_kph");
-
-        double feelsLikeCelsius =
-                current.getDouble("feelslike_c");
-
-        double feelsLikeFahrenheit =
-                current.getDouble("feelslike_f");
-
-        String conditionIconUrl =
-                condition.getString("icon");
-
-        /*
-         * Convert the parsed JSON fields into our WeatherData model.
-         */
-        return new WeatherData(
-                cityName,
-                fullRegion,
-                temperatureCelsius,
-                temperatureFahrenheit,
-                conditionText,
-                windKph,
-                feelsLikeCelsius,
-                feelsLikeFahrenheit,
-                conditionIconUrl
-        );
+        fullRegion =
+                region + ", " + country;
     }
+
+    String conditionText =
+            getWeatherConditionText(weatherCode);
+
+    /*
+     * The current UI uses a local weather icon,
+     * so no remote icon URL is needed here.
+     */
+    String conditionIconUrl = "";
+
+    return new WeatherData(
+            cityName,
+            fullRegion,
+            temperatureCelsius,
+            temperatureFahrenheit,
+            conditionText,
+            windKph,
+            feelsLikeCelsius,
+            feelsLikeFahrenheit,
+            conditionIconUrl
+    );
+}
+
+/**
+ * Converts Open-Meteo's WMO weather code
+ * into text that can be shown on Weather Detail.
+ */
+private String getWeatherConditionText(
+        int weatherCode
+) {
+
+    switch (weatherCode) {
+
+        case 0:
+            return "Clear sky";
+
+        case 1:
+            return "Mainly clear";
+
+        case 2:
+            return "Partly cloudy";
+
+        case 3:
+            return "Overcast";
+
+        case 45:
+        case 48:
+            return "Fog";
+
+        case 51:
+        case 53:
+        case 55:
+            return "Drizzle";
+
+        case 56:
+        case 57:
+            return "Freezing drizzle";
+
+        case 61:
+        case 63:
+        case 65:
+            return "Rain";
+
+        case 66:
+        case 67:
+            return "Freezing rain";
+
+        case 71:
+        case 73:
+        case 75:
+            return "Snow";
+
+        case 77:
+            return "Snow grains";
+
+        case 80:
+        case 81:
+        case 82:
+            return "Rain showers";
+
+        case 85:
+        case 86:
+            return "Snow showers";
+
+        case 95:
+            return "Thunderstorm";
+
+        case 96:
+        case 99:
+            return "Thunderstorm with hail";
+
+        default:
+            return "Unknown conditions";
+    }
+}
+
+
 
     /**
      * Cancels a network request that is still running.

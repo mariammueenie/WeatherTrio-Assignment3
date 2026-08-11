@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
+    app:cardBackgroundColor="@color/surface"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="3dp">
+
+    <!--
+        One reusable row for a location saved in Firestore.
+    -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="18dp">
+
+        <!--
+            Uses the same weather icon as the Search results
+            so the two screens remain visually consistent.
+        -->
+        <ImageView
+            android:id="@+id/imageSavedWeatherIcon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:contentDescription="@string/weather_icon_description"
+            android:src="@drawable/ic_weather_condition"
+            app:tint="@color/secondary" />
+
+        <!--
+            Holds the saved city's name and country.
+        -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textSavedCityName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.WeatherTrio.Headline"
+                android:textSize="22sp" />
+
+            <TextView
+                android:id="@+id/textSavedCountry"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textAppearance="@style/TextAppearance.WeatherTrio.Body"
+                android:textColor="@color/text_secondary" />
+
+        </LinearLayout>
+
+        <!--
+            Removes this specific city from Firestore.
+            The adapter will handle this separately from the card click.
+        -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonRemoveSavedLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:text="Remove"
+            android:textAllCaps="false" />
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

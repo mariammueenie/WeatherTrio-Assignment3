@@ -10,25 +10,25 @@ import com.mariammueen.weathertrio.model.WeatherData;
 import com.mariammueen.weathertrio.repository.WeatherRepository;
 
 /**
- * Stores and manages the weather-detail screen state.
+ * Stores and manages the Weather Detail screen state.
  *
- * The Fragment observes this ViewModel instead of calling
- * WeatherAPI directly. This keeps networking out of the View layer.
+ * The Fragment observes this ViewModel instead of
+ * performing Open-Meteo network requests directly.
  */
 public class WeatherViewModel extends ViewModel {
 
     private static final String TAG = "WeatherViewModel";
 
     /*
-     * The ViewModel communicates with the Repository,
-     * which is responsible for the actual WeatherAPI request.
+     * The Repository performs the actual Open-Meteo
+     * weather request.
      */
     private final WeatherRepository repository =
             new WeatherRepository();
 
     /*
-     * MutableLiveData is private because only the ViewModel
-     * should be able to change these values.
+     * MutableLiveData stays private so only the ViewModel
+     * can change the weather screen state.
      */
     private final MutableLiveData<WeatherData> weatherData =
             new MutableLiveData<>();
@@ -40,131 +40,172 @@ public class WeatherViewModel extends ViewModel {
             new MutableLiveData<>();
 
     /*
-     * Remembers which city is currently loaded or being loaded.
+     * Remembers the exact location currently loaded
+     * or being loaded.
      *
-     * The ViewModel survives a screen rotation, so this lets us
-     * avoid requesting the same city's weather again when Android
-     * recreates the Fragment view.
+     * Latitude and longitude are included because different
+     * cities can have the same name.
      */
-    private String loadedCity = null;
+    private String loadedLocationKey = null;
 
     /**
-     * Exposes weather information as read-only LiveData.
-     *
-     * The Fragment can observe this value but cannot change it.
+     * Gives WeatherDetailFragment read-only access
+     * to the current WeatherData.
      */
     public LiveData<WeatherData> getWeatherData() {
         return weatherData;
     }
 
     /**
-     * Lets the Fragment observe whether an API request
-     * is currently running.
+     * Lets the Fragment observe whether a weather
+     * request is currently running.
      */
     public LiveData<Boolean> getLoading() {
         return loading;
     }
 
     /**
-     * Lets the Fragment observe network or parsing errors.
+     * Lets the Fragment observe weather-loading errors.
      */
     public LiveData<String> getErrorMessage() {
         return errorMessage;
     }
 
     /**
-     * Starts loading current weather for the selected city.
+     * Loads current weather for the exact location selected
+     * from the Open-Meteo city-search results.
      *
-     * If the Fragment is recreated during a screen rotation,
-     * the existing ViewModel is reused. This prevents the same
-     * request from being unnecessarily started again.
+     * Assignment 3 passes latitude and longitude to
+     * Weather Detail, so those coordinates are forwarded
+     * to WeatherRepository.
      */
-    public void loadWeather(String cityName) {
+    public void loadWeather(
+            String cityName,
+            String region,
+            String country,
+            double latitude,
+            double longitude
+    ) {
 
         /*
-         * Do not start another request if this same city
-         * is already being loaded.
+         * Create one identifier for this exact location.
          */
-        if (cityName.equals(loadedCity)
+        String locationKey =
+                cityName
+                        + "|"
+                        + latitude
+                        + "|"
+                        + longitude;
+
+        /*
+         * Do not start another request if this exact
+         * location is already being loaded.
+         */
+        if (locationKey.equals(loadedLocationKey)
                 && Boolean.TRUE.equals(loading.getValue())) {
 
             Log.d(
                     TAG,
-                    "Weather request already running for " + cityName
+                    "Weather request already running for "
+                            + cityName
             );
 
             return;
         }
 
-        /*
-         * If weather for this city has already been loaded,
-         * keep the existing LiveData instead of requesting it again
-         * after a configuration change such as screen rotation.
-         */
         WeatherData existingWeather =
                 weatherData.getValue();
 
-        if (cityName.equals(loadedCity)
+        /*
+         * If this exact location has already loaded successfully,
+         * reuse its existing LiveData.
+         *
+         * This helps avoid another API request after something
+         * like a screen rotation.
+         */
+        if (locationKey.equals(loadedLocationKey)
                 && existingWeather != null) {
 
             Log.d(
                     TAG,
-                    "Reusing existing weather for " + cityName
+                    "Reusing existing weather for "
+                            + cityName
             );
 
             return;
         }
 
         /*
-         * Remember which city this ViewModel is now loading.
+         * Remember which exact location is now being requested.
          */
-        loadedCity = cityName;
+        loadedLocationKey = locationKey;
 
         Log.d(
                 TAG,
-                "Loading weather for " + cityName
+                "Loading Open-Meteo weather for "
+                        + cityName
         );
 
         /*
-         * Tell the View that loading has started.
-         * The Fragment observes this and displays the ProgressBar.
+         * Clear old WeatherData before requesting a different
+         * location.
+         *
+         * This prevents an older city's weather from being
+         * mistaken for the current city if a request fails.
+         */
+        weatherData.setValue(null);
+
+        /*
+         * Tell the Fragment that loading has started.
          */
         loading.setValue(true);
 
         /*
-         * Clear any previous error before another request begins.
+         * Clear any previous error before another request.
          */
         errorMessage.setValue(null);
 
-        repository.getCurrentWeather(
+        /*
+         * Repository performs the actual Open-Meteo request
+         * using the selected latitude and longitude.
+         */
+        repository.getCurrentWeatherByCoordinates(
                 cityName,
+                region,
+                country,
+                latitude,
+                longitude,
                 new WeatherRepository.WeatherCallback() {
 
                     @Override
-                    public void onSuccess(WeatherData result) {
+                    public void onSuccess(
+                            WeatherData result
+                    ) {
 
                         /*
-                         * OkHttp callbacks happen on a background thread,
-                         * so postValue() safely updates the LiveData.
+                         * OkHttp callbacks run on a background thread,
+                         * so postValue() safely updates LiveData.
                          */
                         weatherData.postValue(result);
                         loading.postValue(false);
 
                         Log.i(
                                 TAG,
-                                "Weather successfully loaded"
+                                "Open-Meteo weather successfully loaded"
                         );
                     }
 
                     @Override
-                    public void onError(String message) {
+                    public void onError(
+                            String message
+                    ) {
 
                         errorMessage.postValue(message);
                         loading.postValue(false);
 
                         Log.w(
                                 TAG,
-                                "Weather could not be loaded"
+                                "Open-Meteo weather could not be loaded"
                         );
                     }
                 }
@@ -172,21 +213,22 @@ public class WeatherViewModel extends ViewModel {
     }
 
     /**
-     * Called automatically when Android permanently destroys
-     * this ViewModel.
+     * Called automatically when Android permanently
+     * destroys this ViewModel.
      */
     @Override
     protected void onCleared() {
         super.onCleared();
 
         /*
-         * Cancel any network request that is still running.
+         * Cancel a network request if one is
+         * still running.
          */
         repository.cancelPendingRequests();
 
         Log.d(
                 TAG,
-                "ViewModel cleared"
+                "WeatherViewModel cleared"
         );
     }
 }
