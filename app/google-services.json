@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "201211485192",
+    "project_id": "weathertrio-assignment3",
+    "storage_bucket": "weathertrio-assignment3.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:201211485192:android:b4993e5e86883d9e0e05bd",
+        "android_client_info": {
+          "package_name": "com.mariammueen.weathertrio"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCl_ph7FRyedH8ZKU-_22G2LtS2hbur6cg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

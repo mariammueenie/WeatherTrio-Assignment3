@@ -7,46 +7,64 @@ import android.os.Looper;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.mariammueen.weathertrio.databinding.ActivitySplashBinding;
 
-import com.mariammueen.weathertrio.R;
-import com.mariammueen.weathertrio.databinding.FragmentSearchBinding;
-import com.mariammueen.weathertrio.databinding.FragmentWeatherDetailBinding;
-import com.mariammueen.weathertrio.databinding.FragmentSavedBinding;
-import com.mariammueen.weathertrio.databinding.FragmentSettingsBinding;
-import com.mariammueen.weathertrio.databinding.ActivityMainBinding;
-import com.mariammueen.weathertrio.databinding.ActivitySplashBinding;
-
+/**
+ * Displays the splash screen and decides where the user
+ * should go based on their Firebase Authentication session.
+ */
 public class SplashActivity extends AppCompatActivity {
 
-    // Keeps splash screen visible for two seconds
-    // short delay before opening MainActivity
+    // Keeps the existing splash screen visible for two seconds.
     private static final long SPLASH_DELAY_MILLISECONDS = 2000;
 
-    // Gives access to views in activity_splash.xml
+    // ViewBinding gives access to activity_splash.xml.
     private ActivitySplashBinding binding;
+
+    // FirebaseAuth lets us check whether a user is already signed in.
+    private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Connects activity to splash screen layout using ViewBinding
+        // Connect the Activity to the splash layout.
         binding = ActivitySplashBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        // Runs navigation code after the two-second splash delay
+        // Get the Firebase Authentication instance for this app.
+        auth = FirebaseAuth.getInstance();
+
+        // Keep the original two-second splash delay.
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
 
-            // Creates Intent that opens main app screen
-            Intent intent = new Intent(
-                    SplashActivity.this,
-                    MainActivity.class
-            );
+            Intent intent;
+
+            /*
+             * Firebase keeps the user signed in between app launches.
+             *
+             * If getCurrentUser() returns a user, skip LoginActivity.
+             * Otherwise, send the user to the Login screen.
+             */
+            if (auth.getCurrentUser() != null) {
+
+                intent = new Intent(
+                        SplashActivity.this,
+                        MainActivity.class
+                );
+
+            } else {
+
+                intent = new Intent(
+                        SplashActivity.this,
+                        LoginActivity.class
+                );
+            }
 
             startActivity(intent);
 
-            // Closes SplashActivity after MainActivity opens
-            // prevents Back button from returning to splash screen
+            // Prevent Back from returning to the splash screen.
             finish();
 
         }, SPLASH_DELAY_MILLISECONDS);

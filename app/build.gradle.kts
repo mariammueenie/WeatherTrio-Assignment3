@@ -1,5 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
+
+    // Connects this app module to Firebase.
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -62,4 +65,12 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+
+    // Keeps all Firebase libraries on compatible versions.
+    // Assignment 3 / class material specifies BoM 33.7.0.
+    implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
+
+    // Firebase Authentication will provide registration,
+    // login, current-user sessions and sign out.
+    implementation("com.google.firebase:firebase-auth")
 }

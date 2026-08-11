@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -8,7 +9,7 @@
     android:orientation="vertical">
 
     <!--
-        Displays the required Settings screen title.
+        Displays the Settings screen title.
         This keeps the screen consistent with Search and Saved.
     -->
     <com.google.android.material.appbar.MaterialToolbar
@@ -19,7 +20,7 @@
         app:title="@string/settings_title"
         app:titleTextColor="@color/text_primary" />
 
-    <!-- Holds the settings content below the toolbar -->
+    <!-- Holds all Settings content below the toolbar. -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -28,20 +29,40 @@
         android:padding="24dp">
 
         <!--
+            Shows which Firebase user is currently signed in.
+        -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Signed in as"
+            android:textAppearance="@style/TextAppearance.WeatherTrio.Body"
+            android:textStyle="bold" />
+
+        <!--
+            SettingsFragment will place the authenticated
+            Firebase user's email address here.
+        -->
+        <TextView
+            android:id="@+id/textSignedInEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="user@example.com"
+            android:textAppearance="@style/TextAppearance.WeatherTrio.Body" />
+
+        <!--
             Shows the app version.
-            The actual version value will be inserted from BuildConfig in Java.
+            The real version is inserted from BuildConfig in Java.
         -->
         <TextView
             android:id="@+id/textAppVersion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
             android:text="@string/settings_version_placeholder"
             android:textAppearance="@style/TextAppearance.WeatherTrio.Body" />
 
-        <!--
-            Opens the user's email app with feedback information pre-filled.
-            The icon appears before the label as required.
-        -->
+        <!-- Opens the user's email app with feedback information pre-filled. -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonSendFeedback"
             android:layout_width="match_parent"
@@ -52,10 +73,7 @@
             app:iconGravity="textStart"
             app:iconPadding="12dp" />
 
-        <!--
-            Opens a GitHub page or website in the user's browser.
-            The browser Intent will be connected in SettingsFragment.
-        -->
+        <!-- Opens the project website or GitHub page. -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonViewWebsite"
             android:layout_width="match_parent"
@@ -66,10 +84,7 @@
             app:iconGravity="textStart"
             app:iconPadding="12dp" />
 
-        <!--
-            Opens the Android share sheet.
-            This lets the user share a short message about WeatherTrio.
-        -->
+        <!-- Opens the Android share sheet. -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonShareApp"
             android:layout_width="match_parent"
@@ -79,6 +94,17 @@
             app:icon="@drawable/ic_share"
             app:iconGravity="textStart"
             app:iconPadding="12dp" />
+
+        <!--
+            Signs the current Firebase user out.
+            The Java code will connect this button in the next step.
+        -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonSignOut"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Sign Out" />
 
     </LinearLayout>
 

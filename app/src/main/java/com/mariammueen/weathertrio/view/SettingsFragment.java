@@ -12,21 +12,23 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.mariammueen.weathertrio.BuildConfig;
-import com.mariammueen.weathertrio.databinding.FragmentSettingsBinding;
-
 import com.mariammueen.weathertrio.R;
-import com.mariammueen.weathertrio.databinding.FragmentSearchBinding;
-import com.mariammueen.weathertrio.databinding.FragmentWeatherDetailBinding;
-import com.mariammueen.weathertrio.databinding.FragmentSavedBinding;
 import com.mariammueen.weathertrio.databinding.FragmentSettingsBinding;
-import com.mariammueen.weathertrio.databinding.ActivityMainBinding;
-import com.mariammueen.weathertrio.databinding.ActivitySplashBinding;
 
+/**
+ * Displays WeatherTrio settings and account information.
+ */
 public class SettingsFragment extends Fragment {
 
-    // Gives access to views inside fragment_settings.xml
+    // Gives access to views inside fragment_settings.xml.
     private FragmentSettingsBinding binding;
+
+    // FirebaseAuth gives access to the signed-in user
+    // and handles signing the user out.
+    private FirebaseAuth auth;
 
     @Nullable
     @Override
@@ -35,15 +37,21 @@ public class SettingsFragment extends Fragment {
             @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState
     ) {
-        // Creates Settings screen using ViewBinding
+
+        // Creates the Settings screen using ViewBinding.
         binding = FragmentSettingsBinding.inflate(
                 inflater,
                 container,
                 false
         );
 
-        // Displays app version from BuildConfig
-        // This keeps the version text connected to actual project version
+        // Gets the Firebase Authentication instance.
+        auth = FirebaseAuth.getInstance();
+
+        // Show the email address of the currently signed-in user.
+        displaySignedInUser();
+
+        // Displays app version from BuildConfig.
         binding.textAppVersion.setText(
                 getString(
                         R.string.settings_version_format,
@@ -51,30 +59,92 @@ public class SettingsFragment extends Fragment {
                 )
         );
 
-        // Opens user's email app with feedback information pre-filled
-        binding.buttonSendFeedback.setOnClickListener(view -> {
-            openFeedbackEmail();
-        });
+        // Opens the user's email app with feedback information pre-filled.
+        binding.buttonSendFeedback.setOnClickListener(view ->
+                openFeedbackEmail()
+        );
 
-        // Opens selected GitHub or website page in a browser
-        binding.buttonViewWebsite.setOnClickListener(view -> {
-            openWebsite();
-        });
+        // Opens the selected GitHub or website page.
+        binding.buttonViewWebsite.setOnClickListener(view ->
+                openWebsite()
+        );
 
-        // Opens Android share sheet with a short app message
-        binding.buttonShareApp.setOnClickListener(view -> {
-            shareApp();
-        });
+        // Opens the Android share sheet.
+        binding.buttonShareApp.setOnClickListener(view ->
+                shareApp()
+        );
+
+        // Signs the Firebase user out and returns to LoginActivity.
+        binding.buttonSignOut.setOnClickListener(view ->
+                signOutUser()
+        );
 
         return binding.getRoot();
     }
 
+    /**
+     * Displays the current Firebase user's email
+     * on the Settings screen.
+     */
+    private void displaySignedInUser() {
+
+        FirebaseUser currentUser = auth.getCurrentUser();
+
+        if (currentUser != null
+                && currentUser.getEmail() != null) {
+
+            binding.textSignedInEmail.setText(
+                    currentUser.getEmail()
+            );
+
+        } else {
+
+            // This should normally only happen if there is
+            // no valid Firebase Authentication session.
+            binding.textSignedInEmail.setText(
+                    "No signed-in user"
+            );
+        }
+    }
+
+    /**
+     * Signs the current Firebase user out and
+     * returns the app to the Login screen.
+     */
+    private void signOutUser() {
+
+        // Firebase immediately clears the current auth session.
+        auth.signOut();
+
+        Intent intent = new Intent(
+                requireContext(),
+                LoginActivity.class
+        );
+
+        /*
+         * Clear the authenticated screens from the back stack.
+         * This prevents Back from returning to MainActivity.
+         */
+        intent.setFlags(
+                Intent.FLAG_ACTIVITY_NEW_TASK
+                        | Intent.FLAG_ACTIVITY_CLEAR_TASK
+        );
+
+        startActivity(intent);
+    }
+
+    /**
+     * Opens the user's email app with feedback information.
+     */
     private void openFeedbackEmail() {
-        // ACTION_SENDTO with a mailto URI limits this Intent to email apps
+
+        // ACTION_SENDTO with a mailto URI limits this Intent to email apps.
         Uri emailUri = Uri.parse(
                 "mailto:mariam_mueen@live.ca"
                         + "?subject="
-                        + Uri.encode(getString(R.string.feedback_subject))
+                        + Uri.encode(
+                                getString(R.string.feedback_subject)
+                        )
         );
 
         Intent emailIntent = new Intent(
@@ -82,13 +152,16 @@ public class SettingsFragment extends Fragment {
                 emailUri
         );
 
-        // Checks that email app can handle the Intent
+        // Check that an email app can handle the Intent.
         if (emailIntent.resolveActivity(
                 requireContext().getPackageManager()
         ) != null) {
+
             startActivity(emailIntent);
+
         } else {
-            // Shows clear message instead of allowing the app to crash
+
+            // Show a message instead of allowing the app to crash.
             Toast.makeText(
                     requireContext(),
                     R.string.error_no_email_app,
@@ -97,8 +170,12 @@ public class SettingsFragment extends Fragment {
         }
     }
 
+    /**
+     * Opens the project website in a browser.
+     */
     private void openWebsite() {
-        // TODO: Replace this URL later with the final project repo
+
+        // TODO: Replace this URL later with the final project repository.
         Uri websiteUri = Uri.parse(
                 "https://github.com/"
         );
@@ -108,12 +185,15 @@ public class SettingsFragment extends Fragment {
                 websiteUri
         );
 
-        // Checks that browser or another compatible app is available
+        // Check that a browser is available.
         if (websiteIntent.resolveActivity(
                 requireContext().getPackageManager()
         ) != null) {
+
             startActivity(websiteIntent);
+
         } else {
+
             Toast.makeText(
                     requireContext(),
                     R.string.error_no_browser,
@@ -122,11 +202,16 @@ public class SettingsFragment extends Fragment {
         }
     }
 
+    /**
+     * Opens Android's share sheet with a short
+     * message about WeatherTrio.
+     */
     private void shareApp() {
-        // ACTION_SEND opens the system share sheet
-        Intent shareIntent = new Intent(Intent.ACTION_SEND);
 
-        // text/plain matches the short text message being shared
+        Intent shareIntent =
+                new Intent(Intent.ACTION_SEND);
+
+        // The shared content is plain text.
         shareIntent.setType("text/plain");
 
         shareIntent.putExtra(
@@ -134,18 +219,23 @@ public class SettingsFragment extends Fragment {
                 getString(R.string.share_app_message)
         );
 
-        // A chooser lets user select which compatible app to use
-        Intent chooserIntent = Intent.createChooser(
-                shareIntent,
-                getString(R.string.share_app_chooser_title)
-        );
+        Intent chooserIntent =
+                Intent.createChooser(
+                        shareIntent,
+                        getString(
+                                R.string.share_app_chooser_title
+                        )
+                );
 
-        // Checks that at least one app can handle share request
+        // Check that at least one app can handle sharing.
         if (shareIntent.resolveActivity(
                 requireContext().getPackageManager()
         ) != null) {
+
             startActivity(chooserIntent);
+
         } else {
+
             Toast.makeText(
                     requireContext(),
                     R.string.error_no_share_app,
@@ -158,7 +248,7 @@ public class SettingsFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
 
-        // Clears old view reference when fragment view is destroyed
+        // Clear the old view reference when this Fragment is destroyed.
         binding = null;
     }
 }

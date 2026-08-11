@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="32dp">
+
+    <!-- Heading for the account registration screen. -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Create Account"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="32dp" />
+
+    <!-- Email used to create the Firebase account. -->
+    <EditText
+        android:id="@+id/editRegisterEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Email"
+        android:inputType="textEmailAddress"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Password for the new account. -->
+    <EditText
+        android:id="@+id/editRegisterPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Used to make sure the password was typed correctly. -->
+    <EditText
+        android:id="@+id/editConfirmPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Confirm password"
+        android:inputType="textPassword"
+        android:layout_marginBottom="24dp" />
+
+    <!-- Creates the Firebase account. -->
+    <Button
+        android:id="@+id/buttonRegister"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Register" />
+
+    <!-- Returns an existing user to the login screen. -->
+    <TextView
+        android:id="@+id/textBackToLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Already have an account? Login"
+        android:padding="16dp" />
+
+    <!-- Registration errors will appear here. -->
+    <TextView
+        android:id="@+id/textRegisterError"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:visibility="gone" />
+
+</LinearLayout>

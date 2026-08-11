@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- Allows the app to request live weather data from WeatherAPI -->
+    <!-- Allows WeatherTrio to access live weather,
+         city search, and Firebase services over the internet. -->
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -10,19 +12,31 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.WeatherTrio">
 
-        <!-- MainActivity contains the main three-tab app interface -->
+        <!-- MainActivity contains the main Search, Saved,
+             and Settings sections of the app. -->
         <activity
             android:name=".view.MainActivity"
             android:exported="false" />
 
-        <!-- SplashActivity opens first when the app launches -->
+        <!-- Login screen for existing Firebase users. -->
+        <activity
+            android:name=".view.LoginActivity"
+            android:exported="false" />
+
+        <!-- Registration screen for new Firebase users. -->
+        <activity
+            android:name=".view.RegisterActivity"
+            android:exported="false" />
+
+        <!-- SplashActivity remains the first screen shown
+             when WeatherTrio launches. -->
         <activity
             android:name=".view.SplashActivity"
             android:exported="true"
             android:noHistory="true"
             android:theme="@style/Theme.WeatherTrio.Splash">
- 
-            <!-- Makes SplashActivity the launcher activity -->
+
+            <!-- Makes SplashActivity the launcher activity. -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
