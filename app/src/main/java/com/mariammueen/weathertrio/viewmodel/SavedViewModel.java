@@ -232,17 +232,23 @@ public class SavedViewModel extends ViewModel {
                 new SavedLocationRepository.RemoveLocationCallback() {
 
                     @Override
-                    public void onRemoved() {
+                        public void onRemoved() {
 
-                        operationMessage.postValue(
-                                "Location removed."
-                        );
+                            /*
+                            * The location no longer exists in Firestore,
+                            * so update the Detail screen's saved state.
+                            */
+                            locationSaved.postValue(false);
 
-                        Log.d(
-                                TAG,
-                                "Location removed"
-                        );
-                    }
+                            operationMessage.postValue(
+                                    "Location removed."
+                            );
+
+                            Log.d(
+                                    TAG,
+                                    "Location removed"
+                            );
+                        }
 
                     @Override
                     public void onError(String message) {

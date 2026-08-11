@@ -50,6 +50,9 @@ public class WeatherDetailFragment extends Fragment {
     // Kotlin helper used to format Celsius or Fahrenheit.
     private TemperatureFormatter temperatureFormatter;
 
+    // Tracks whether the current city is already saved.
+private boolean isLocationSaved = false;
+
     /*
      * Complete location information passed from Search
      * or from the Saved screen.
@@ -224,15 +227,29 @@ public class WeatherDetailFragment extends Fragment {
         binding.buttonSaveLocation.setOnClickListener(
                 view -> {
 
-                    SavedLocation location =
-                            createSavedLocation();
+                        SavedLocation location =
+                                createSavedLocation();
 
-                    savedViewModel.saveLocation(
-                            location
-                    );
+                        /*
+                        * The same button can save or remove
+                        * the current city depending on its
+                        * Firestore saved state.
+                        */
+                        if (isLocationSaved) {
+
+                        savedViewModel.removeLocation(
+                                location
+                        );
+
+                        } else {
+
+                        savedViewModel.saveLocation(
+                                location
+                        );
+                        }
                 }
         );
-    }
+        }
 
     /**
      * Creates a Firestore-ready SavedLocation from the
@@ -354,30 +371,37 @@ public class WeatherDetailFragment extends Fragment {
                 getViewLifecycleOwner(),
                 isSaved -> {
 
-                    if (Boolean.TRUE.equals(isSaved)) {
+                    /*
+                * Remember the current Firestore state so the
+                * button knows whether to save or remove.
+                */
+                isLocationSaved =
+                        Boolean.TRUE.equals(isSaved);
 
-                        binding.buttonSaveLocation.setText(
-                                "Saved"
-                        );
+                if (isLocationSaved) {
 
-                        /*
-                         * Disable another save attempt once
-                         * Firestore confirms the location exists.
-                         */
-                        binding.buttonSaveLocation.setEnabled(
-                                false
-                        );
+                /*
+                * Keep the button enabled so the user
+                * can remove this city again.
+                */
+                binding.buttonSaveLocation.setText(
+                        "Remove Location"
+                );
 
-                    } else {
+                binding.buttonSaveLocation.setEnabled(
+                        true
+                );
 
-                        binding.buttonSaveLocation.setText(
-                                "Save Location"
-                        );
+                } else {
 
-                        binding.buttonSaveLocation.setEnabled(
-                                true
-                        );
-                    }
+                binding.buttonSaveLocation.setText(
+                        "Save Location"
+                );
+
+                binding.buttonSaveLocation.setEnabled(
+                        true
+                );
+                }
                 }
         );
 
