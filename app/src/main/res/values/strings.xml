@@ -88,7 +88,7 @@
     <string name="settings_version_placeholder">Version</string>
     <string name="settings_version_format">Version %1$s</string>
     <string name="settings_send_feedback">Send Feedback</string>
-    <string name="settings_view_website">View on GitHub</string>
+    <string name="settings_view_website">View in GitHub</string>
     <string name="settings_share_app">Share App</string>
     <string name="settings_sign_out">Sign Out</string>
 

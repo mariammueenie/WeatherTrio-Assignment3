@@ -285,9 +285,9 @@ public class SettingsFragment extends Fragment {
      */
     private void openWebsite() {
 
-        // TODO: Replace this URL later with the final project repository.
+        // Make sure 'view on github' button works
         Uri websiteUri = Uri.parse(
-                "https://github.com/"
+                "https://github.com/mariammueenie/WeatherTrio-Assignment3"
         );
 
         Intent websiteIntent = new Intent(

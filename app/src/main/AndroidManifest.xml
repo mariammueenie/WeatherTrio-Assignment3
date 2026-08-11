@@ -6,6 +6,30 @@
          city search, and Firebase services over the internet. -->
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!--
+        Android 11+ limits which installed apps can be discovered
+        through PackageManager checks such as resolveActivity().
+
+        WeatherTrio checks for an email app and a browser before
+        launching those system intents, so declare both here.
+    -->
+    <queries>
+
+        <!-- Allows Send Feedback to discover email apps. -->
+        <intent>
+            <action android:name="android.intent.action.SENDTO" />
+            <data android:scheme="mailto" />
+        </intent>
+
+        <!-- Allows View on GitHub to discover web browsers. -->
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="https" />
+        </intent>
+
+    </queries>
+
     <application
         android:allowBackup="true"
         android:label="@string/app_name"
@@ -38,9 +62,11 @@
 
             <!-- Makes SplashActivity the launcher activity. -->
             <intent-filter>
+
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+
             </intent-filter>
 
         </activity>
