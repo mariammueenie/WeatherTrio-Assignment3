@@ -83,7 +83,7 @@ The Firebase configuration file (`app/google-services.json`) is included with th
 Alternatively, from the project root on Windows, a debug build can be created with:
 
 ```powershell
-(.\gradlew.bat assembleDebug)
+.\gradlew.bat assembleDebug
 ```
 
 A configured Android SDK and compatible JDK are required to build and run the application.
