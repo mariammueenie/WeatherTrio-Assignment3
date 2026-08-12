@@ -63,9 +63,24 @@ The full Assignment 3 application demonstration and code walkthrough is availabl
 
 ## Build Notes
 
-The project uses the included Gradle wrapper.
+### Requirements
 
-From the project root, a debug build can be created with:
+- Android Studio
+- Android SDK with API 34 installed
+- Compatible JDK
+- Internet connection for Gradle dependencies, Firebase, and weather data
+
+The Firebase configuration file (`app/google-services.json`) is included with the project.
+
+### Build Instructions
+
+1. Extract the project ZIP.
+2. Open the `WeatherTrio-Assignment3-main` folder in Android Studio.
+3. Allow Android Studio to complete the Gradle sync.
+4. Select or create an Android emulator compatible with the project's minimum SDK.
+5. Run the application from Android Studio.
+
+Alternatively, from the project root on Windows, a debug build can be created with:
 
 ```powershell
 .\gradlew.bat assembleDebug
